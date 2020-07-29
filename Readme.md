@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Алексей Третьяков](https://up.htmlacademy.ru/ecmascript/12/user/155988).
-* Наставник: `Неизвестно`.
+* Наставник: [Жора Милевский](https://htmlacademy.ru/profile/id366911).
 
 ---
 
