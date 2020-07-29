@@ -10,7 +10,7 @@ const EXTRA_FILMS_LISTS = [
   {
     title: `Most commented`,
   }
-]
+];
 
 const createProfilePreviewTemplate = () => {
   return (
@@ -18,8 +18,8 @@ const createProfilePreviewTemplate = () => {
       <p class="profile__rating">Movie Buff</p>
       <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
     </section>`
-  )
-}
+  );
+};
 
 const createNavTemplate = () => {
   return (
@@ -32,8 +32,8 @@ const createNavTemplate = () => {
       </div>
       <a href="#stats" class="main-navigation__additional">Stats</a>
     </nav>`
-  )
-}
+  );
+};
 
 const createSortingTemplate = () => {
   return (
@@ -86,7 +86,7 @@ const createFilmTemplate = () => {
       </form>
     </article>`
   );
-}
+};
 
 const createShowMoreTemplate = () => {
   return (
@@ -312,6 +312,6 @@ extraLists.forEach((list) => {
   for (let i = 0; i < EXTRA_FILMS_COUNT; i++) {
     render(listContainer, createFilmTemplate(), `beforeend`);
   }
-})
+});
 
 render(siteFooterElement, createDetailsTemplate(), `afterend`);
