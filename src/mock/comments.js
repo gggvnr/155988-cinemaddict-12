@@ -24,10 +24,10 @@ const generateComment = () => {
     reaction: getRandomArrayItem(reactions),
     author: getRandomArrayItem(authors),
     text: getRandomArrayItem(comments),
-    postTime: getRandomDate(new Date(`2000-12-12`), new Date()),
+    postedAt: getRandomDate(new Date(`2000-12-12`), new Date()),
   };
 };
 
 export const generateComments = (length) => {
-  return new Array(length).fill().map(() => generateComment());
+  return new Array(length).fill().map(generateComment);
 };

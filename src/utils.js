@@ -30,3 +30,7 @@ export const getCurrentDate = () => {
 
   return new Date(currentDate);
 };
+
+export const truncateString = (value, length) => {
+  return value.length > length ? `${value.slice(0, length)}...` : value;
+};

@@ -5,17 +5,17 @@ import {generateComments} from './comments';
 
 const titles = [
   `Made for each other`,
-  `popeye-meets-sinbad`,
-  `sagebrush-trail`,
-  `santa-claus-conquers-the-martians`,
-  `the-dance-of-life`,
-  `the-great-flamarion`,
-  `the-man-with-the-golden-arm`,
+  `Popeye meets sinbad`,
+  `Sagebrush trail`,
+  `Santa claus conquers the martians`,
+  `The dance of life`,
+  `The great flamarion`,
+  `The man with the golden arm`,
 ];
 
 const posters = [
-  `./images/posters/made-for-each-other.jpg`,
-  `./images/posters/popeye-meets-sinbad.jpg`,
+  `./images/posters/made-for-each-other.png`,
+  `./images/posters/popeye-meets-sinbad.png`,
   `./images/posters/sagebrush-trail.jpg`,
   `./images/posters/santa-claus-conquers-the-martians.jpg`,
   `./images/posters/the-dance-of-life.jpg`,
@@ -46,7 +46,15 @@ const generateRating = () => {
 };
 
 const generateDuration = () => {
-  return `${getRandomInteger(0, 60)}h ${getRandomInteger(0, 60)}m`;
+  const duration = {
+    h: getRandomInteger(0, 30),
+    m: getRandomInteger(0, 60),
+  };
+
+  return Object.entries(duration)
+    .map(([key, value]) => value ? `${value}${key}` : ``)
+    .filter(Boolean)
+    .join(` `);
 };
 
 export const generateFilm = () => {
@@ -58,6 +66,6 @@ export const generateFilm = () => {
     date: getRandomDate(new Date(`1950-02-12`), new Date()),
     duration: generateDuration(),
     genre: getRandomArrayItem(genres),
-    comments: generateComments(),
+    comments: generateComments(getRandomInteger(0, 5)),
   };
 };
