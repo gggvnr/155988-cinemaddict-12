@@ -1,4 +1,10 @@
-import {getRandomArrayItem, getRandomInteger, getRandomDate} from '../utils';
+import {
+  getRandomArrayItem,
+  getRandomInteger,
+  getRandomDate,
+  getSeveralRandomArrayItems
+} from '../utils';
+
 import {LOREM_TEXT_PLACEHOLDER, DESCRIPTION_MAX_LENGTH, MAX_RATING_IN_PERCENTS} from '../const';
 
 import {generateComments} from './comments';
@@ -32,13 +38,27 @@ const genres = [
   `Mystery`,
 ];
 
+const names = [
+  `Anthony Mann`,
+  `Anne Wigton`,
+  `Heinz Herald`,
+  `Richard Weil`,
+  `Erich von Stroheim`,
+  `Mary Beth Hughes`,
+  `Dan Duryea`,
+];
+
+const countries = [
+  `USA`,
+  `Russia`,
+  `Iraq`,
+  `Moldova`,
+];
+
 const generateDescription = () => {
-  const descriptionLength = getRandomInteger(0, DESCRIPTION_MAX_LENGTH);
   const loremSentences = LOREM_TEXT_PLACEHOLDER.split(`. `);
 
-  return new Array(descriptionLength).fill()
-    .map(() => getRandomArrayItem(loremSentences))
-    .join(`. `);
+  return getSeveralRandomArrayItems(loremSentences, DESCRIPTION_MAX_LENGTH).join(`. `);
 };
 
 const generateRating = () => {
@@ -60,12 +80,18 @@ const generateDuration = () => {
 export const generateFilm = () => {
   return {
     title: getRandomArrayItem(titles),
+    originalTitle: getRandomArrayItem(titles),
+    director: getRandomArrayItem(names),
+    writers: getSeveralRandomArrayItems(names, 3),
+    actors: getSeveralRandomArrayItems(names, 3),
+    country: getRandomArrayItem(countries),
+    contentRating: getRandomInteger(0, 21),
     poster: getRandomArrayItem(posters),
     description: generateDescription(),
     rating: generateRating(),
     date: getRandomDate(new Date(`1950-02-12`), new Date()),
     duration: generateDuration(),
-    genre: getRandomArrayItem(genres),
+    genres: getSeveralRandomArrayItems(genres, 3),
     comments: generateComments(getRandomInteger(0, 5)),
   };
 };

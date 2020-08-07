@@ -24,13 +24,16 @@ export const getRandomArrayItem = (dataArray) => {
   return dataArray[randomIndex];
 };
 
-export const getCurrentDate = () => {
-  const currentDate = new Date();
-  currentDate.setHours(23, 59, 59, 999);
+export const getSeveralRandomArrayItems = (dataArray, maxItemsCount) => {
+  const itemsCount = getRandomInteger(1, maxItemsCount);
 
-  return new Date(currentDate);
+  return [...dataArray].sort(() => 0.5 - Math.random()).slice(0, itemsCount);
 };
 
 export const truncateString = (value, length) => {
   return value.length > length ? `${value.slice(0, length)}...` : value;
+};
+
+export const humanizeDate = (date) => {
+  return date.toLocaleString(`en-GB`, {day: `numeric`, month: `long`, year: `numeric`});
 };

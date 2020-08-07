@@ -8,6 +8,7 @@ import {createListTemplate} from './view/films-list';
 import {createFilmTemplate} from './view/film';
 import {createShowMoreTemplate} from './view/show-more-button';
 import {createFooterStatisticsTemplate} from './view/footer-statistics';
+import {createFilmDetailsTemplate} from './view/film-details';
 
 import {generateFilm} from './mock/film';
 
@@ -28,6 +29,7 @@ const EXTRA_FILMS_LISTS = [
 const mainFilms = new Array(MAIN_FILMS_COUNT).fill().map(generateFilm);
 
 const siteHeaderElement = document.querySelector(`.header`);
+const siteFooterElement = document.querySelector(`.footer`);
 const siteMainElement = document.querySelector(`.main`);
 
 render(siteHeaderElement, createProfilePreviewTemplate(), `beforeend`);
@@ -72,3 +74,5 @@ extraLists.forEach((list) => {
 const statisticsContainer = document.querySelector(`.footer__statistics`);
 
 render(statisticsContainer, createFooterStatisticsTemplate(), `beforeend`);
+
+render(siteFooterElement, createFilmDetailsTemplate(mainFilms[0]), `afterend`);
