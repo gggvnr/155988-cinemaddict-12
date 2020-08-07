@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
@@ -36,4 +38,12 @@ export const truncateString = (value, length) => {
 
 export const humanizeDate = (date) => {
   return date.toLocaleString(`en-GB`, {day: `numeric`, month: `long`, year: `numeric`});
+};
+
+export const humanizeCommentDate = (date) => {
+  const duration = moment.duration(date.getTime() - Date.now(), `milliseconds`);
+
+  return duration.asWeeks() >= -1
+    ? duration.humanize(true)
+    : moment(date).format(`YYYY/MM/DD HH:MM`);
 };

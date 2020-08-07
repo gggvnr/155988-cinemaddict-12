@@ -1,4 +1,4 @@
-import {humanizeDate} from '../utils';
+import {humanizeCommentDate} from '../utils';
 
 export const createCommentTemplate = ({
   reaction,
@@ -15,7 +15,7 @@ export const createCommentTemplate = ({
         <p class="film-details__comment-text">${text}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${humanizeDate(postedAt)}</span>
+          <span class="film-details__comment-day">${humanizeCommentDate(postedAt)}</span>
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>

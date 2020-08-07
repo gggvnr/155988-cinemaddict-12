@@ -24,7 +24,7 @@ const generateComment = () => {
     reaction: getRandomArrayItem(reactions),
     author: getRandomArrayItem(authors),
     text: getRandomArrayItem(comments),
-    postedAt: getRandomDate(new Date(`2000-12-12`), new Date()),
+    postedAt: getRandomDate(new Date(`2020-07-02`), new Date()),
   };
 };
 
