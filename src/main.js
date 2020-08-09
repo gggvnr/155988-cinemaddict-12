@@ -14,25 +14,16 @@ import {generateFilm} from './mock/film';
 import {generateFilters} from './mock/filter';
 import {generateUserRank} from './mock/user-rank';
 import {generateFooterStats} from './mock/footer-stats';
+import {generateExtraLists} from './mock/extra';
 
 const MAIN_FILMS_COUNT = 20;
 const MAIN_FILMS_COUNT_PER_STEP = 5;
 
-const EXTRA_FILMS_COUNT = 2;
-
-const EXTRA_FILMS_LISTS = [
-  {
-    title: `Top rated`,
-  },
-  {
-    title: `Most commented`,
-  }
-];
-
-const mainFilms = new Array(MAIN_FILMS_COUNT).fill().map(generateFilm);
-const filters = generateFilters(mainFilms);
-const userRankLabel = generateUserRank(mainFilms);
-const footerStats = generateFooterStats(mainFilms);
+const films = new Array(MAIN_FILMS_COUNT).fill().map(generateFilm);
+const filters = generateFilters(films);
+const extraListsData = generateExtraLists(films);
+const userRankLabel = generateUserRank(films);
+const footerStats = generateFooterStats(films);
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteFooterElement = document.querySelector(`.footer`);
@@ -53,32 +44,30 @@ render(boardElement, createListTemplate({
 const mainList = boardElement.querySelector(`.films-list`);
 const mainListContainer = mainList.querySelector(`.films-list__container`);
 
-for (let i = 0; i < Math.min(mainFilms.length, MAIN_FILMS_COUNT_PER_STEP); i++) {
-  render(mainListContainer, createFilmTemplate(mainFilms[i]), `beforeend`);
+for (let i = 0; i < Math.min(films.length, MAIN_FILMS_COUNT_PER_STEP); i++) {
+  render(mainListContainer, createFilmTemplate(films[i]), `beforeend`);
 }
 
 render(mainList, createShowMoreTemplate(), `beforeend`);
 
-EXTRA_FILMS_LISTS.forEach(({title}) => {
+extraListsData.forEach(({title, className}) => {
   render(boardElement, createListTemplate({
-    className: `films-list--extra`,
+    className,
     title
   }), `beforeend`);
 });
 
 const extraLists = boardElement.querySelectorAll(`.films-list--extra`);
 
-extraLists.forEach((list) => {
+extraLists.forEach((list, i) => {
   const listContainer = list.querySelector(`.films-list__container`);
-  const extraFilms = new Array(EXTRA_FILMS_COUNT).fill().map(generateFilm);
+  const extraFilms = extraListsData[i].films;
 
-  for (let i = 0; i < EXTRA_FILMS_COUNT; i++) {
-    render(listContainer, createFilmTemplate(extraFilms[i]), `beforeend`);
-  }
+  extraFilms.forEach((extraFilm) => render(listContainer, createFilmTemplate(extraFilm), `beforeend`));
 });
 
 const statisticsContainer = document.querySelector(`.footer__statistics`);
 
 render(statisticsContainer, createFooterStatisticsTemplate(footerStats), `beforeend`);
 
-render(siteFooterElement, createFilmDetailsTemplate(mainFilms[0]), `afterend`);
+render(siteFooterElement, createFilmDetailsTemplate(films[0]), `afterend`);
