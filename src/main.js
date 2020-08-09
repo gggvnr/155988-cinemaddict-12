@@ -1,6 +1,6 @@
 import {render} from './utils';
 
-import {createProfilePreviewTemplate} from './view/profile-preview';
+import {createUserRankTemplate} from './view/user-rank';
 import {createNavTemplate} from './view/nav';
 import {createSortingTemplate} from './view/sorting';
 import {createBoardTemplate} from './view/board';
@@ -12,6 +12,8 @@ import {createFilmDetailsTemplate} from './view/film-details';
 
 import {generateFilm} from './mock/film';
 import {generateFilters} from './mock/filter';
+import {generateUserRank} from './mock/user-rank';
+import {generateFooterStats} from './mock/footer-stats';
 
 const MAIN_FILMS_COUNT = 20;
 const MAIN_FILMS_COUNT_PER_STEP = 5;
@@ -29,12 +31,14 @@ const EXTRA_FILMS_LISTS = [
 
 const mainFilms = new Array(MAIN_FILMS_COUNT).fill().map(generateFilm);
 const filters = generateFilters(mainFilms);
+const userRankLabel = generateUserRank(mainFilms);
+const footerStats = generateFooterStats(mainFilms);
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteFooterElement = document.querySelector(`.footer`);
 const siteMainElement = document.querySelector(`.main`);
 
-render(siteHeaderElement, createProfilePreviewTemplate(), `beforeend`);
+render(siteHeaderElement, createUserRankTemplate(userRankLabel), `beforeend`);
 render(siteMainElement, createNavTemplate(filters), `beforeend`);
 render(siteMainElement, createSortingTemplate(), `beforeend`);
 render(siteMainElement, createBoardTemplate(), `beforeend`);
@@ -75,6 +79,6 @@ extraLists.forEach((list) => {
 
 const statisticsContainer = document.querySelector(`.footer__statistics`);
 
-render(statisticsContainer, createFooterStatisticsTemplate(), `beforeend`);
+render(statisticsContainer, createFooterStatisticsTemplate(footerStats), `beforeend`);
 
 render(siteFooterElement, createFilmDetailsTemplate(mainFilms[0]), `afterend`);

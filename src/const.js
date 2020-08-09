@@ -2,3 +2,10 @@ export const LOREM_TEXT_PLACEHOLDER = `Lorem ipsum dolor sit amet, consectetur a
 
 export const DESCRIPTION_MAX_LENGTH = 5;
 export const MAX_RATING_IN_PERCENTS = 100;
+
+export const userRanksMap = {
+  '': (count) => count <= 0,
+  'Novice': (count) => count > 0 && count <= 10,
+  'Fan': (count) => count > 10 && count <= 20,
+  'Movie Buff': (count) => count > 20,
+};
