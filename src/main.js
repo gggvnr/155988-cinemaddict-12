@@ -15,10 +15,10 @@ import {generateFilters} from './mock/filter';
 import {generateUserRank} from './mock/user-rank';
 import {generateExtraLists} from './mock/extra';
 
-const MAIN_FILMS_COUNT = 20;
-const MAIN_FILMS_COUNT_PER_STEP = 5;
+const FILMS_COUNT = 20;
+const FILMS_COUNT_PER_STEP = 5;
 
-const films = new Array(MAIN_FILMS_COUNT).fill().map(generateFilm);
+const films = new Array(FILMS_COUNT).fill().map(generateFilm);
 const filters = generateFilters(films);
 const extraListsData = generateExtraLists(films);
 const userRankLabel = generateUserRank(films);
@@ -42,11 +42,30 @@ render(boardElement, createListTemplate({
 const mainList = boardElement.querySelector(`.films-list`);
 const mainListContainer = mainList.querySelector(`.films-list__container`);
 
-for (let i = 0; i < Math.min(films.length, MAIN_FILMS_COUNT_PER_STEP); i++) {
+for (let i = 0; i < Math.min(films.length, FILMS_COUNT_PER_STEP); i++) {
   render(mainListContainer, createFilmTemplate(films[i]), `beforeend`);
 }
 
-render(mainList, createShowMoreTemplate(), `beforeend`);
+if (films.length > FILMS_COUNT_PER_STEP) {
+  let renderedFilmsCount = FILMS_COUNT_PER_STEP;
+
+  render(mainList, createShowMoreTemplate(), `beforeend`);
+
+  const showMoreButton = boardElement.querySelector(`.films-list__show-more`);
+
+  showMoreButton.addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+    films
+      .slice(renderedFilmsCount, renderedFilmsCount + FILMS_COUNT_PER_STEP)
+      .forEach((film) => render(mainListContainer, createFilmTemplate(film), `beforeend`));
+
+    renderedFilmsCount += FILMS_COUNT_PER_STEP;
+
+    if (renderedFilmsCount >= films.length) {
+      showMoreButton.remove();
+    }
+  });
+}
 
 extraListsData.forEach(({title, className}) => {
   render(boardElement, createListTemplate({
