@@ -13,7 +13,6 @@ import {createFilmDetailsTemplate} from './view/film-details';
 import {generateFilm} from './mock/film';
 import {generateFilters} from './mock/filter';
 import {generateUserRank} from './mock/user-rank';
-import {generateFooterStats} from './mock/footer-stats';
 import {generateExtraLists} from './mock/extra';
 
 const MAIN_FILMS_COUNT = 20;
@@ -23,7 +22,6 @@ const films = new Array(MAIN_FILMS_COUNT).fill().map(generateFilm);
 const filters = generateFilters(films);
 const extraListsData = generateExtraLists(films);
 const userRankLabel = generateUserRank(films);
-const footerStats = generateFooterStats(films);
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteFooterElement = document.querySelector(`.footer`);
@@ -68,6 +66,6 @@ extraLists.forEach((list, i) => {
 
 const statisticsContainer = document.querySelector(`.footer__statistics`);
 
-render(statisticsContainer, createFooterStatisticsTemplate(footerStats), `beforeend`);
+render(statisticsContainer, createFooterStatisticsTemplate(films.length), `beforeend`);
 
 render(siteFooterElement, createFilmDetailsTemplate(films[0]), `afterend`);
