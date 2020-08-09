@@ -11,6 +11,7 @@ import {createFooterStatisticsTemplate} from './view/footer-statistics';
 import {createFilmDetailsTemplate} from './view/film-details';
 
 import {generateFilm} from './mock/film';
+import {generateFilters} from './mock/filter';
 
 const MAIN_FILMS_COUNT = 20;
 const MAIN_FILMS_COUNT_PER_STEP = 5;
@@ -27,13 +28,14 @@ const EXTRA_FILMS_LISTS = [
 ];
 
 const mainFilms = new Array(MAIN_FILMS_COUNT).fill().map(generateFilm);
+const filters = generateFilters(mainFilms);
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteFooterElement = document.querySelector(`.footer`);
 const siteMainElement = document.querySelector(`.main`);
 
 render(siteHeaderElement, createProfilePreviewTemplate(), `beforeend`);
-render(siteMainElement, createNavTemplate(), `beforeend`);
+render(siteMainElement, createNavTemplate(filters), `beforeend`);
 render(siteMainElement, createSortingTemplate(), `beforeend`);
 render(siteMainElement, createBoardTemplate(), `beforeend`);
 

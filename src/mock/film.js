@@ -93,5 +93,8 @@ export const generateFilm = () => {
     duration: generateDuration(),
     genres: getSeveralRandomArrayItems(genres, 3),
     comments: generateComments(getRandomInteger(0, 5)),
+    isInWatchlist: Boolean(getRandomInteger(0, 1)),
+    isWatched: Boolean(getRandomInteger(0, 1)),
+    isFavorite: Boolean(getRandomInteger(0, 1)),
   };
 };

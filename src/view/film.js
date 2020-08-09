@@ -11,9 +11,18 @@ export const createFilmTemplate = ({
   duration = ``,
   genres = [],
   comments = [],
+  isInWatchlist,
+  isWatched,
+  isFavorite,
 }) => {
   const year = date.getFullYear();
   const truncatedDescription = truncateString(description, MAX_DESCRIPTION_LENGTH);
+
+  const controlActiveClassname = `film-card__controls-item--active`;
+
+  const watchlistClassname = isInWatchlist ? controlActiveClassname : ``;
+  const watchedClassname = isWatched ? controlActiveClassname : ``;
+  const favoriteClassname = isFavorite ? controlActiveClassname : ``;
 
   return (
     `<article class="film-card">
@@ -28,9 +37,9 @@ export const createFilmTemplate = ({
       <p class="film-card__description">${truncatedDescription}</p>
       <a class="film-card__comments">${comments.length} comments</a>
       <form class="film-card__controls">
-        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">Add to watchlist</button>
-        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched  film-card__controls-item--active">Mark as watched</button>
-        <button class="film-card__controls-item button film-card__controls-item--favorite">Mark as favorite</button>
+        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${watchlistClassname}">Add to watchlist</button>
+        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${watchedClassname}">Mark as watched</button>
+        <button class="film-card__controls-item button film-card__controls-item--favorite ${favoriteClassname}">Mark as favorite</button>
       </form>
     </article>`
   );
