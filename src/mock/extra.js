@@ -1,3 +1,5 @@
+import {EXTRA_LIST_TOP_RATED_KEY, EXTRA_LIST_MOST_COMMENTED_KEY} from '../const';
+
 const getTopRatedFilms = (films) => {
   return [...films].sort((a, b) => b.rating - a.rating).slice(0, 2);
 };
@@ -8,19 +10,18 @@ const getMostCommentedFilms = (films) => {
 
 const extraFilmsLists = [
   {
-    title: `Top rated`,
+    key: EXTRA_LIST_TOP_RATED_KEY,
     getFilms: getTopRatedFilms,
   },
   {
-    title: `Most commented`,
+    key: EXTRA_LIST_MOST_COMMENTED_KEY,
     getFilms: getMostCommentedFilms,
   }
 ];
 
 const generateExtraList = (films, extraData) => {
   return {
-    className: `films-list--extra`,
-    title: extraData.title,
+    key: extraData.key,
     films: extraData.getFilms(films),
   };
 };

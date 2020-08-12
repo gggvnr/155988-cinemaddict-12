@@ -3,9 +3,42 @@ export const LOREM_TEXT_PLACEHOLDER = `Lorem ipsum dolor sit amet, consectetur a
 export const DESCRIPTION_MAX_LENGTH = 5;
 export const MAX_RATING_IN_PERCENTS = 100;
 
-export const userRanksMap = {
-  '': (count) => count <= 0,
-  'Novice': (count) => count > 0 && count <= 10,
-  'Fan': (count) => count > 10 && count <= 20,
-  'Movie Buff': (count) => count > 20,
+export const userRankStrings = {
+  NOVICE: `Novice`,
+  FAN: `Fan`,
+  MOVIE_BUFF: `Movie Buff`,
+};
+
+export const EXTRA_LIST_TOP_RATED_KEY = `topRated`;
+export const EXTRA_LIST_MOST_COMMENTED_KEY = `mostCommented`;
+
+export const extraListsTitles = {
+  [EXTRA_LIST_TOP_RATED_KEY]: `Top rated`,
+  [EXTRA_LIST_MOST_COMMENTED_KEY]: `Most commented`,
+};
+
+export const filterTypeKeys = {
+  ALL: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`,
+};
+
+export const filterTypes = {
+  [filterTypeKeys.ALL]: {
+    link: `#all`,
+    label: `All Items`,
+  },
+  [filterTypeKeys.WATCHLIST]: {
+    link: `#watchilst`,
+    label: `Watchlist`,
+  },
+  [filterTypeKeys.HISTORY]: {
+    link: `#watchilst`,
+    label: `History`,
+  },
+  [filterTypeKeys.FAVORITES]: {
+    link: `#watchilst`,
+    label: `Favorites`,
+  },
 };

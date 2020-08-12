@@ -1,5 +1,7 @@
 import {render} from './utils';
 
+import {extraListsTitles} from './const';
+
 import {createUserRankTemplate} from './view/user-rank';
 import {createNavTemplate} from './view/nav';
 import {createSortingTemplate} from './view/sorting';
@@ -67,10 +69,10 @@ if (films.length > FILMS_COUNT_PER_STEP) {
   });
 }
 
-extraListsData.forEach(({title, className}) => {
+extraListsData.forEach(({key}) => {
   render(boardElement, createListTemplate({
-    className,
-    title
+    className: `films-list--extra`,
+    title: extraListsTitles[key]
   }), `beforeend`);
 });
 

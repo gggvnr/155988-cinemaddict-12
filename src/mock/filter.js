@@ -1,28 +1,18 @@
+import {filterTypeKeys, filterTypes} from '../const';
+
 const filmToFilterMap = {
-  'All Movies': {
-    link: `#all`,
-    getCount: (films) => films.length,
-  },
-  'Watchlist': {
-    link: `#watchlist`,
-    getCount: (films) => films.filter((film) => film.isInWatchlist).length,
-  },
-  'History': {
-    link: `#history`,
-    getCount: (films) => films.filter((film) => film.isWatched).length,
-  },
-  'Favorites': {
-    link: `#favorites`,
-    getCount: (films) => films.filter((film) => film.isFavorite).length,
-  },
+  [filterTypeKeys.ALL]: (films) => films.length,
+  [filterTypeKeys.WATCHLIST]: (films) => films.filter((film) => film.isInWatchlist).length,
+  [filterTypeKeys.HISTORY]: (films) => films.filter((film) => film.isWatched).length,
+  [filterTypeKeys.FAVORITES]: (films) => films.filter((film) => film.isFavorite).length,
 };
 
 export const generateFilters = (films) => {
-  return Object.entries(filmToFilterMap).map(([filterName, filterData]) => {
+  return Object.entries(filmToFilterMap).map(([filterTypeKey, getCount]) => {
     return {
-      name: filterName,
-      link: filterData.link,
-      count: filterData.getCount(films),
+      label: filterTypes[filterTypeKey].label,
+      link: filterTypes[filterTypeKey].link,
+      count: getCount(films),
     };
   });
 };
