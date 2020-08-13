@@ -42,3 +42,51 @@ export const filterTypes = {
     label: `Favorites`,
   },
 };
+
+export const filmsMockData = {
+  titles: [
+    `Made for each other`,
+    `Popeye meets sinbad`,
+    `Sagebrush trail`,
+    `Santa claus conquers the martians`,
+    `The dance of life`,
+    `The great flamarion`,
+    `The man with the golden arm`,
+  ],
+
+  posters: [
+    `./images/posters/made-for-each-other.png`,
+    `./images/posters/popeye-meets-sinbad.png`,
+    `./images/posters/sagebrush-trail.jpg`,
+    `./images/posters/santa-claus-conquers-the-martians.jpg`,
+    `./images/posters/the-dance-of-life.jpg`,
+    `./images/posters/the-great-flamarion.jpg`,
+    `./images/posters/the-man-with-the-golden-arm.jpg`,
+  ],
+
+  genres: [
+    `Musical`,
+    `Western`,
+    `Drama`,
+    `Comedy`,
+    `Cartoon`,
+    `Mystery`,
+  ],
+
+  names: [
+    `Anthony Mann`,
+    `Anne Wigton`,
+    `Heinz Herald`,
+    `Richard Weil`,
+    `Erich von Stroheim`,
+    `Mary Beth Hughes`,
+    `Dan Duryea`,
+  ],
+
+  countries: [
+    `USA`,
+    `Russia`,
+    `Iraq`,
+    `Moldova`,
+  ],
+};

@@ -4,20 +4,24 @@ import {createCommentTemplate} from './comment';
 
 export const createFilmDetailsTemplate = ({
   title = ``,
-  originalTitle = ``,
-  director = ``,
-  writers = [],
-  actors = [],
-  country = ``,
-  contentRating = 0,
   poster = ``,
   description = ``,
   rating = 0,
   date = new Date(),
   duration = ``,
-  genres = [],
+  filmDetails: {
+    originalTitle = ``,
+    director = ``,
+    writers = [],
+    actors = [],
+    country = ``,
+    contentRating = 0,
+    genres = [],
+  },
   comments = [],
 }) => {
+  const genresLabel = genres.length > 1 ? `Genres` : `Genre`;
+
   return (
     `<section class="film-details">
       <form class="film-details__inner" action="" method="get">
@@ -70,7 +74,7 @@ export const createFilmDetailsTemplate = ({
                   <td class="film-details__cell">${country}</td>
                 </tr>
                 <tr class="film-details__row">
-                  <td class="film-details__term">Genres</td>
+                  <td class="film-details__term">${genresLabel}</td>
                   <td class="film-details__cell">
                     ${genres.map((genre) => (`<span class="film-details__genre">${genre}</span>`)).join(``)}
                   </td>
