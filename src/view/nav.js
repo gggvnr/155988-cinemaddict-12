@@ -1,13 +1,16 @@
-export const createNavTemplate = () => {
+export const createNavTemplate = (filters, isActive) => {
+  const activeClassname = isActive ? `main-navigation__item--active` : ``;
+
   return (
     `<nav class="main-navigation">
       <div class="main-navigation__items">
-        <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
-        <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">13</span></a>
-        <a href="#history" class="main-navigation__item">History <span class="main-navigation__item-count">4</span></a>
-        <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">8</span></a>
+        ${filters.map(({label, link, count}) => (`<a href="${link}" class="main-navigation__item ${activeClassname}">${label} ${renderNavCount(count)}</a>`)).join(``)}
       </div>
       <a href="#stats" class="main-navigation__additional">Stats</a>
     </nav>`
   );
+};
+
+const renderNavCount = (value) => {
+  return value ? `<span class="main-navigation__item-count">${value}</span>` : ``;
 };
