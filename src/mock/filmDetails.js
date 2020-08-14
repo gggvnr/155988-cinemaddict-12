@@ -1,4 +1,4 @@
-import {getRandomArrayItem, getSeveralRandomArrayItems, getRandomInteger} from '../utils';
+import {getRandomArrayItem, getSeveralRandomArrayItems, getRandomInteger} from '../utils/common';
 import {filmsMockData} from '../const';
 
 export const generateFilmDetails = () => {

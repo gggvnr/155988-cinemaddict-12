@@ -1,3 +1,5 @@
+import {createElement} from '../utils/render';
+
 export const createSortingTemplate = () => {
   return (
     `<ul class="sort">
@@ -7,3 +9,25 @@ export const createSortingTemplate = () => {
     </ul>`
   );
 };
+
+export default class Sorting {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSortingTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

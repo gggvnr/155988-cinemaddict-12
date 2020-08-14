@@ -1,4 +1,6 @@
-import {truncateString} from '../utils';
+import {createElement} from '../utils/render';
+
+import {truncateString} from '../utils/common';
 
 const MAX_DESCRIPTION_LENGTH = 140;
 
@@ -44,3 +46,27 @@ export const createFilmTemplate = ({
     </article>`
   );
 };
+
+export default class Film {
+  constructor(filmData) {
+    this._film = filmData;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

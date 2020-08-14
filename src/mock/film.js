@@ -3,7 +3,7 @@ import {
   getRandomInteger,
   getRandomDate,
   getSeveralRandomArrayItems
-} from '../utils';
+} from '../utils/common';
 
 import {
   LOREM_TEXT_PLACEHOLDER,

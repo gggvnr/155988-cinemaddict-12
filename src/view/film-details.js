@@ -1,6 +1,8 @@
-import {humanizeDate} from '../utils';
+import {createElement} from '../utils/render';
 
-import {createCommentTemplate} from './comment';
+import CommentView from './comment';
+
+import {humanizeDate} from '../utils/common';
 
 export const createFilmDetailsTemplate = ({
   title = ``,
@@ -104,7 +106,11 @@ export const createFilmDetailsTemplate = ({
             </h3>
 
             <ul class="film-details__comments-list">
-              ${comments.map((comment) => createCommentTemplate(comment)).join(``)}
+    ${comments.map((comment) => {
+      const commentComponent = new CommentView(comment);
+
+      return commentComponent.getTemplate();
+    }).join(``)}
             </ul>
 
             <div class="film-details__new-comment">
@@ -142,3 +148,27 @@ export const createFilmDetailsTemplate = ({
     </section>`
   );
 };
+
+export default class FilmDetails {
+  constructor(filmData) {
+    this._film = filmData;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
