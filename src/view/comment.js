@@ -1,6 +1,8 @@
-import {humanizeCommentDate} from '../utils';
+import {createElement} from '../utils/render';
 
-export const createCommentTemplate = ({
+import {humanizeCommentDate} from '../utils/common';
+
+const createCommentTemplate = ({
   reaction,
   text,
   author,
@@ -22,3 +24,27 @@ export const createCommentTemplate = ({
     </li>`
   );
 };
+
+export default class Comment {
+  constructor(commentData) {
+    this._comment = commentData;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createCommentTemplate(this._comment);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
