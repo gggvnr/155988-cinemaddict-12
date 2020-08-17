@@ -52,9 +52,30 @@ export default class Film extends Abstract {
     super();
 
     this._film = filmData;
+
+    this._cardClickHandler = this._cardClickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmTemplate(this._film);
+  }
+
+  _cardClickHandler(evt) {
+    evt.preventDefault();
+    this._callbacks.cardClick(this._film);
+  }
+
+  setCardClickHandler(callback) {
+    this._callbacks.cardClick = callback;
+
+    const filmElement = this.getElement();
+    const filmPosterElement = filmElement.querySelector(`.film-card__poster`);
+    const filmTitleElement = filmElement.querySelector(`.film-card__title`);
+    const filmCommentsElement = filmElement.querySelector(`.film-card__comments`);
+    const modalTriggers = [filmPosterElement, filmTitleElement, filmCommentsElement];
+
+    modalTriggers.forEach((modalTrigger) => {
+      modalTrigger.addEventListener(`click`, this._cardClickHandler);
+    });
   }
 }

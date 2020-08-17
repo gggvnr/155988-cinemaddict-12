@@ -154,9 +154,38 @@ export default class FilmDetails extends Abstract {
     super();
 
     this._film = filmData;
+
+    this._closeButtonElement = this.getElement().querySelector(`.film-details__close-btn`);
+
+    this._closeClickHandler = this._closeClickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmDetailsTemplate(this._film);
+  }
+
+  removeElement() {
+    this.getElement().remove();
+
+    super.removeElement();
+    this._closeButtonElement = null;
+  }
+
+  _closeClickHandler(evt) {
+    evt.preventDefault();
+
+    if (this._callbacks.closeClick) {
+      this._callbacks.closeClick();
+    }
+
+    this._closeButtonElement.removeEventListener(`click`, this._closeClickHandler);
+
+    this.removeElement();
+  }
+
+  setCloseClickHandler(callback) {
+    this._callbacks.closeClick = callback;
+
+    this._closeButtonElement.addEventListener(`click`, this._closeClickHandler);
   }
 }

@@ -43,18 +43,8 @@ const siteMainElement = document.querySelector(`.main`);
 
 function renderFilmDetails(filmData) {
   const filmDetailsComponent = new FilmDetailsView(filmData);
-  const filmDetailsElement = filmDetailsComponent.getElement();
 
-  const closeButton = filmDetailsElement.querySelector(`.film-details__close-btn`);
-
-  function closeModal() {
-    filmDetailsElement.remove();
-    filmDetailsComponent.removeElement();
-
-    closeButton.removeEventListener(`click`, closeModal);
-  }
-
-  closeButton.addEventListener(`click`, closeModal);
+  filmDetailsComponent.setCloseClickHandler();
 
   render(document.body, filmDetailsComponent, `beforeend`);
 }
@@ -62,17 +52,9 @@ function renderFilmDetails(filmData) {
 function renderFilm(container, filmData) {
   const filmComponent = new FilmView(filmData);
 
+  filmComponent.setCardClickHandler(renderFilmDetails);
+
   render(container, filmComponent, `beforeend`);
-
-  const filmElement = filmComponent.getElement();
-  const filmPosterElement = filmElement.querySelector(`.film-card__poster`);
-  const filmTitleElement = filmElement.querySelector(`.film-card__title`);
-  const filmCommentsElement = filmElement.querySelector(`.film-card__comments`);
-  const modalTriggers = [filmPosterElement, filmTitleElement, filmCommentsElement];
-
-  modalTriggers.forEach((modalTrigger) => {
-    modalTrigger.addEventListener(`click`, () => renderFilmDetails(filmData));
-  });
 }
 
 render(siteHeaderElement, userRankComponent, `beforeend`);
