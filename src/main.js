@@ -1,117 +1,62 @@
-import {render} from './utils/render';
+import {render, RenderPosition} from './utils/render';
 
-import {extraListsTitles} from './const';
+import MovieList from './presenter/movieList';
 
+import BoardView from './view/board';
 import UserRankView from './view/user-rank';
 import NavView from './view/nav';
 import SortingView from './view/sorting';
-import BoardView from "./view/board";
-import ListView from './view/films-list';
-import FilmView from './view/film';
-import ShowMoreView from './view/show-more-button';
 import FooterStatisticsView from './view/footer-statistics';
-import FilmDetailsView from './view/film-details';
 
 import {generateFilm} from './mock/film';
 import {generateFilters} from './mock/filter';
 import {generateUserRank} from './mock/user-rank';
 import {generateExtraLists} from './mock/extra';
 
+import {extraListsTitles} from './const';
+
 const FILMS_COUNT = 20;
-const FILMS_COUNT_PER_STEP = 5;
 
 const films = new Array(FILMS_COUNT).fill().map(generateFilm);
 const filters = generateFilters(films);
-const extraListsData = generateExtraLists(films);
 const userRankLabel = generateUserRank(films);
+
+const filmLists = [
+  {
+    title: `All movies. Upcoming`,
+    isTitleHidden: true,
+    renderLoadMore: true,
+    films,
+  },
+  ...generateExtraLists(films).map((list) => ({
+    title: extraListsTitles[list.key],
+    className: `films-list--extra`,
+    films: list.films,
+  })),
+];
 
 const userRankComponent = new UserRankView(userRankLabel);
 const navComponent = new NavView(filters);
 const sortingComponent = new SortingView();
 const boardComponent = new BoardView();
-const showMoreComponent = new ShowMoreView();
-
-const mainListComponent = new ListView({
-  title: `All movies. Upcoming`,
-  isTitleHidden: true,
-});
 
 const footerStatisticsComponent = new FooterStatisticsView(films.length);
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
-
-function renderFilmDetails(filmData) {
-  const filmDetailsComponent = new FilmDetailsView(filmData);
-
-  filmDetailsComponent.setCloseClickHandler();
-
-  render(document.body, filmDetailsComponent, `beforeend`);
-}
-
-function renderFilm(container, filmData) {
-  const filmComponent = new FilmView(filmData);
-
-  filmComponent.setCardClickHandler(renderFilmDetails);
-
-  render(container, filmComponent, `beforeend`);
-}
-
-render(siteHeaderElement, userRankComponent, `beforeend`);
-render(siteMainElement, navComponent, `beforeend`);
-render(siteMainElement, sortingComponent, `beforeend`);
-render(siteMainElement, boardComponent, `beforeend`);
-
-const boardElement = siteMainElement.querySelector(`.films`);
-
-render(boardElement, mainListComponent, `beforeend`);
-
-const mainList = boardElement.querySelector(`.films-list`);
-const mainListContainer = mainList.querySelector(`.films-list__container`);
-
-for (let i = 0; i < Math.min(films.length, FILMS_COUNT_PER_STEP); i++) {
-  renderFilm(mainListContainer, films[i]);
-}
-
-if (films.length > FILMS_COUNT_PER_STEP) {
-  let renderedFilmsCount = FILMS_COUNT_PER_STEP;
-
-  render(mainList, showMoreComponent, `beforeend`);
-
-  const showMoreButton = boardElement.querySelector(`.films-list__show-more`);
-
-  showMoreButton.addEventListener(`click`, (evt) => {
-    evt.preventDefault();
-    films
-      .slice(renderedFilmsCount, renderedFilmsCount + FILMS_COUNT_PER_STEP)
-      .forEach((film) => renderFilm(mainListContainer, film));
-
-    renderedFilmsCount += FILMS_COUNT_PER_STEP;
-
-    if (renderedFilmsCount >= films.length) {
-      showMoreButton.remove();
-    }
-  });
-}
-
-extraListsData.forEach(({key}) => {
-  const extraListComponent = new ListView({
-    className: `films-list--extra`,
-    title: extraListsTitles[key]
-  });
-
-  render(boardElement, extraListComponent, `beforeend`);
-});
-
-const extraLists = boardElement.querySelectorAll(`.films-list--extra`);
-
-extraLists.forEach((list, i) => {
-  const listContainer = list.querySelector(`.films-list__container`);
-  const extraFilms = extraListsData[i].films;
-
-  extraFilms.forEach((extraFilm) => renderFilm(listContainer, extraFilm));
-});
-
 const statisticsContainer = document.querySelector(`.footer__statistics`);
 
-render(statisticsContainer, footerStatisticsComponent, `beforeend`);
+function renderList(listData) {
+  const listPresenter = new MovieList(boardComponent, listData);
+
+  listPresenter.init(listData.films);
+}
+
+render(siteHeaderElement, userRankComponent, RenderPosition.BEFOREEND);
+render(siteMainElement, navComponent, RenderPosition.BEFOREEND);
+render(siteMainElement, sortingComponent, RenderPosition.BEFOREEND);
+render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
+
+filmLists.forEach((listData) => renderList(listData));
+
+render(statisticsContainer, footerStatisticsComponent, RenderPosition.BEFOREEND);
