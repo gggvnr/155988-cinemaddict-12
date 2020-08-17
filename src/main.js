@@ -56,13 +56,13 @@ function renderFilmDetails(filmData) {
 
   closeButton.addEventListener(`click`, closeModal);
 
-  render(document.body, filmDetailsComponent.getElement(), `beforeend`);
+  render(document.body, filmDetailsComponent, `beforeend`);
 }
 
 function renderFilm(container, filmData) {
   const filmComponent = new FilmView(filmData);
 
-  render(container, filmComponent.getElement(), `beforeend`);
+  render(container, filmComponent, `beforeend`);
 
   const filmElement = filmComponent.getElement();
   const filmPosterElement = filmElement.querySelector(`.film-card__poster`);
@@ -75,14 +75,14 @@ function renderFilm(container, filmData) {
   });
 }
 
-render(siteHeaderElement, userRankComponent.getElement(), `beforeend`);
-render(siteMainElement, navComponent.getElement(), `beforeend`);
-render(siteMainElement, sortingComponent.getElement(), `beforeend`);
-render(siteMainElement, boardComponent.getElement(), `beforeend`);
+render(siteHeaderElement, userRankComponent, `beforeend`);
+render(siteMainElement, navComponent, `beforeend`);
+render(siteMainElement, sortingComponent, `beforeend`);
+render(siteMainElement, boardComponent, `beforeend`);
 
 const boardElement = siteMainElement.querySelector(`.films`);
 
-render(boardElement, mainListComponent.getElement(), `beforeend`);
+render(boardElement, mainListComponent, `beforeend`);
 
 const mainList = boardElement.querySelector(`.films-list`);
 const mainListContainer = mainList.querySelector(`.films-list__container`);
@@ -94,7 +94,7 @@ for (let i = 0; i < Math.min(films.length, FILMS_COUNT_PER_STEP); i++) {
 if (films.length > FILMS_COUNT_PER_STEP) {
   let renderedFilmsCount = FILMS_COUNT_PER_STEP;
 
-  render(mainList, showMoreComponent.getElement(), `beforeend`);
+  render(mainList, showMoreComponent, `beforeend`);
 
   const showMoreButton = boardElement.querySelector(`.films-list__show-more`);
 
@@ -118,7 +118,7 @@ extraListsData.forEach(({key}) => {
     title: extraListsTitles[key]
   });
 
-  render(boardElement, extraListComponent.getElement(), `beforeend`);
+  render(boardElement, extraListComponent, `beforeend`);
 });
 
 const extraLists = boardElement.querySelectorAll(`.films-list--extra`);
@@ -132,4 +132,4 @@ extraLists.forEach((list, i) => {
 
 const statisticsContainer = document.querySelector(`.footer__statistics`);
 
-render(statisticsContainer, footerStatisticsComponent.getElement(), `beforeend`);
+render(statisticsContainer, footerStatisticsComponent, `beforeend`);

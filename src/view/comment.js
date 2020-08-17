@@ -1,4 +1,4 @@
-import {createElement} from '../utils/render';
+import Abstract from './abstract';
 
 import {humanizeCommentDate} from '../utils/common';
 
@@ -25,26 +25,14 @@ const createCommentTemplate = ({
   );
 };
 
-export default class Comment {
+export default class Comment extends Abstract {
   constructor(commentData) {
-    this._comment = commentData;
+    super();
 
-    this._element = null;
+    this._comment = commentData;
   }
 
   getTemplate() {
     return createCommentTemplate(this._comment);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,4 +1,4 @@
-import {createElement} from '../utils/render';
+import Abstract from './abstract';
 
 import CommentView from './comment';
 
@@ -149,26 +149,14 @@ export const createFilmDetailsTemplate = ({
   );
 };
 
-export default class FilmDetails {
+export default class FilmDetails extends Abstract {
   constructor(filmData) {
-    this._film = filmData;
+    super();
 
-    this._element = null;
+    this._film = filmData;
   }
 
   getTemplate() {
     return createFilmDetailsTemplate(this._film);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

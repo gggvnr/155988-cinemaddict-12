@@ -1,4 +1,4 @@
-import {createElement} from '../utils/render';
+import Abstract from './abstract';
 
 export const createNavTemplate = (filters, isActive) => {
   const activeClassname = isActive ? `main-navigation__item--active` : ``;
@@ -17,26 +17,14 @@ const renderNavCount = (value) => {
   return value ? `<span class="main-navigation__item-count">${value}</span>` : ``;
 };
 
-export default class Nav {
+export default class Nav extends Abstract {
   constructor(filters) {
-    this._filters = filters;
+    super();
 
-    this._element = null;
+    this._filters = filters;
   }
 
   getTemplate() {
     return createNavTemplate(this._filters);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

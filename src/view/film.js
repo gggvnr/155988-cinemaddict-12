@@ -1,4 +1,4 @@
-import {createElement} from '../utils/render';
+import Abstract from './abstract';
 
 import {truncateString} from '../utils/common';
 
@@ -47,26 +47,14 @@ export const createFilmTemplate = ({
   );
 };
 
-export default class Film {
+export default class Film extends Abstract {
   constructor(filmData) {
-    this._film = filmData;
+    super();
 
-    this._element = null;
+    this._film = filmData;
   }
 
   getTemplate() {
     return createFilmTemplate(this._film);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
