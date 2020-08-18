@@ -1,4 +1,4 @@
-import {createElement} from '../utils/render';
+import Abstract from './abstract';
 
 import CommentView from './comment';
 
@@ -149,26 +149,43 @@ export const createFilmDetailsTemplate = ({
   );
 };
 
-export default class FilmDetails {
+export default class FilmDetails extends Abstract {
   constructor(filmData) {
+    super();
+
     this._film = filmData;
 
-    this._element = null;
+    this._closeButtonElement = this.getElement().querySelector(`.film-details__close-btn`);
+
+    this._closeClickHandler = this._closeClickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmDetailsTemplate(this._film);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
+  removeElement() {
+    this.getElement().remove();
 
-    return this._element;
+    super.removeElement();
+    this._closeButtonElement = null;
   }
 
-  removeElement() {
-    this._element = null;
+  _closeClickHandler(evt) {
+    evt.preventDefault();
+
+    if (this._callbacks.closeClick) {
+      this._callbacks.closeClick();
+    }
+
+    this._closeButtonElement.removeEventListener(`click`, this._closeClickHandler);
+
+    this.removeElement();
+  }
+
+  setCloseClickHandler(callback) {
+    this._callbacks.closeClick = callback;
+
+    this._closeButtonElement.addEventListener(`click`, this._closeClickHandler);
   }
 }

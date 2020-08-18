@@ -1,4 +1,4 @@
-import {createElement} from '../utils/render';
+import Abstract from './abstract';
 
 export const createListTemplate = ({
   className = `films-list`,
@@ -15,26 +15,18 @@ export const createListTemplate = ({
   );
 };
 
-export default class FilmsList {
+export default class FilmsList extends Abstract {
   constructor(listOptions) {
-    this._listOptions = listOptions;
+    super();
 
-    this._element = null;
+    this._listOptions = listOptions;
   }
 
   getTemplate() {
     return createListTemplate(this._listOptions);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  getListContainer() {
+    return this.getElement().querySelector(`.films-list__container`);
   }
 }

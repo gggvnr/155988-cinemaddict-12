@@ -1,4 +1,4 @@
-import {createElement} from '../utils/render';
+import Abstract from './abstract';
 
 import {truncateString} from '../utils/common';
 
@@ -47,26 +47,35 @@ export const createFilmTemplate = ({
   );
 };
 
-export default class Film {
+export default class Film extends Abstract {
   constructor(filmData) {
+    super();
+
     this._film = filmData;
 
-    this._element = null;
+    this._cardClickHandler = this._cardClickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmTemplate(this._film);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _cardClickHandler(evt) {
+    evt.preventDefault();
+    this._callbacks.cardClick(this._film);
   }
 
-  removeElement() {
-    this._element = null;
+  setCardClickHandler(callback) {
+    this._callbacks.cardClick = callback;
+
+    const filmElement = this.getElement();
+    const filmPosterElement = filmElement.querySelector(`.film-card__poster`);
+    const filmTitleElement = filmElement.querySelector(`.film-card__title`);
+    const filmCommentsElement = filmElement.querySelector(`.film-card__comments`);
+    const modalTriggers = [filmPosterElement, filmTitleElement, filmCommentsElement];
+
+    modalTriggers.forEach((modalTrigger) => {
+      modalTrigger.addEventListener(`click`, this._cardClickHandler);
+    });
   }
 }
