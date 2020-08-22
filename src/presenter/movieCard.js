@@ -12,7 +12,7 @@ export default class MovieCard {
 
     this._filmComponent = null;
 
-    this._filmDetailsPresenter = new MovieDetails();
+    this._filmDetailsPresenter = new MovieDetails(changeData);
   }
 
   init(filmData) {
@@ -85,7 +85,11 @@ export default class MovieCard {
   }
 
   hideDetails() {
-    this._filmDetailsPresenter.destroy();
+    this._filmDetailsPresenter.hide();
+  }
+
+  updateModal(data) {
+    this._filmDetailsPresenter.updateData(data);
   }
 
   resetState() {

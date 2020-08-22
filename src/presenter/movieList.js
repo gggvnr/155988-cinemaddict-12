@@ -1,5 +1,5 @@
 import MovieCard from './movieCard';
-import MovieDetails from './movieDetails';
+// import MovieDetails from './movieDetails';
 
 import ListView from '../view/films-list';
 import ShowMoreView from '../view/show-more-button';
@@ -23,7 +23,7 @@ export default class MovieList {
     this._showMoreButtonComponent = new ShowMoreView();
 
     this._filmPresenters = {};
-    this._filmDetailsPresenter = new MovieDetails();
+    // this._filmDetailsPresenter = new MovieDetails();
 
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
@@ -88,6 +88,7 @@ export default class MovieList {
   _handleFilmChange(newFilmData) {
     this._boardTasks = updateItem(this._films, newFilmData);
     this._filmPresenters[newFilmData.id].init(newFilmData);
+    this._filmPresenters[newFilmData.id].updateModal(newFilmData);
   }
 
   _updateFilmsState(filmData) {
