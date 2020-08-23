@@ -91,10 +91,6 @@ export default class MovieList {
     this._filmPresenters[newFilmData.id].updateModal(newFilmData);
   }
 
-  _updateFilmsState(filmData) {
-    this._films = updateItem(this._films, filmData);
-  }
-
   _handleModalOpen() {
     Object.keys(this._filmPresenters).forEach((id) => this._filmPresenters[id].resetState());
   }

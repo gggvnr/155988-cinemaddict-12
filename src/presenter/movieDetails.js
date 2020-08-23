@@ -1,4 +1,7 @@
-import FilmDetailsView from '../view/film-details';
+import FilmDetailsContainer from '../view/details/film-details-container';
+import FilmDetailsTopData from '../view/details/film-details-top-data';
+import FilmDetailsControls from '../view/details/film-details-controls';
+import FilmDetailsComments from '../view/details/film-details-comments';
 
 import {render, RenderPosition, remove} from '../utils/render';
 
@@ -6,12 +9,17 @@ export default class MovieDetails {
   constructor(changeData) {
     this._changeData = changeData;
 
-    this._detailsComponent = new FilmDetailsView();
+    this._detailsContainer = new FilmDetailsContainer();
 
-    this._detailsComponent.setCloseClickHandler(() => this.hide());
-    this._detailsComponent.setFavoritesClickHandler(() => this._handleFavoritesChange());
-    this._detailsComponent.setWatchedClickHandler(() => this._handleWatchedChange());
-    this._detailsComponent.setWatchlistClickHandler(() => this._handleWatchlistChange());
+    this._detailsTopData = new FilmDetailsTopData(this._filmData);
+    this._detailsTopData.setCloseClickHandler(() => this.hide());
+
+    this._detailsControls = new FilmDetailsControls(this._filmData);
+    this._detailsControls.setFavoritesClickHandler(() => this._handleFavoritesChange());
+    this._detailsControls.setWatchedClickHandler(() => this._handleWatchedChange());
+    this._detailsControls.setWatchlistClickHandler(() => this._handleWatchlistChange());
+
+    this._detailsComments = new FilmDetailsComments(this._filmData);
 
     this.updateData = this.updateData.bind(this);
   }
@@ -54,19 +62,25 @@ export default class MovieDetails {
 
   show(filmData) {
     this._filmData = filmData;
+
     this.updateData(filmData);
 
-    render(document.body, this._detailsComponent, RenderPosition.BEFOREEND);
+    render(document.body, this._detailsContainer, RenderPosition.BEFOREEND);
+    render(this._detailsContainer, this._detailsTopData, RenderPosition.BEFOREEND);
+    render(this._detailsContainer, this._detailsControls, RenderPosition.BEFOREEND);
+    render(this._detailsContainer, this._detailsComments, RenderPosition.BEFOREEND);
   }
 
   updateData(data) {
     this._filmData = data;
-    this._detailsComponent.updateData(data);
+    this._detailsTopData.updateData(data);
+    this._detailsControls.updateData(data);
+    this._detailsComments.updateData(data);
   }
 
   hide() {
-    if (this._detailsComponent) {
-      remove(this._detailsComponent);
+    if (this._detailsContainer) {
+      remove(this._detailsContainer);
     }
   }
 }
