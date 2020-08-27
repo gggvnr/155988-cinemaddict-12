@@ -1,5 +1,4 @@
 import MovieCard from './movieCard';
-// import MovieDetails from './movieDetails';
 
 import ListView from '../view/films-list';
 import ShowMoreView from '../view/show-more-button';
@@ -23,7 +22,6 @@ export default class MovieList {
     this._showMoreButtonComponent = new ShowMoreView();
 
     this._filmPresenters = {};
-    // this._filmDetailsPresenter = new MovieDetails();
 
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);

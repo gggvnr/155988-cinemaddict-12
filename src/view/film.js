@@ -87,13 +87,15 @@ export default class Film extends Abstract {
   setCardClickHandler(callback) {
     this._callbacks.cardClick = callback;
 
-    const filmPosterElement = this._filmElement.querySelector(`.film-card__poster`);
-    const filmTitleElement = this._filmElement.querySelector(`.film-card__title`);
-    const filmCommentsElement = this._filmElement.querySelector(`.film-card__comments`);
-    const modalTriggers = [filmPosterElement, filmTitleElement, filmCommentsElement];
+    const handlerElements = [`film-card__poster`, `film-card__title`, `film-card__comments`];
 
-    modalTriggers.forEach((modalTrigger) => {
-      modalTrigger.addEventListener(`click`, this._cardClickHandler);
+    this._filmElement.addEventListener(`click`, (evt) => {
+      const element = evt.target;
+      const isHandlerElement = handlerElements.some((className) => element.classList.contains(className));
+
+      if (isHandlerElement) {
+        this._cardClickHandler(evt);
+      }
     });
   }
 
