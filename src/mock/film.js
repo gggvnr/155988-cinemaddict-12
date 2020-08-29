@@ -1,4 +1,5 @@
 import {
+  generateId,
   getRandomArrayItem,
   getRandomInteger,
   getRandomDate,
@@ -39,6 +40,7 @@ const generateDuration = () => {
 
 export const generateFilm = () => {
   return {
+    id: generateId(),
     title: getRandomArrayItem(filmsMockData.titles),
     poster: getRandomArrayItem(filmsMockData.posters),
     description: generateDescription(),

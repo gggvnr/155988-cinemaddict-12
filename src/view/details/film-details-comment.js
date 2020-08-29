@@ -1,6 +1,6 @@
-import Abstract from './abstract';
+import Abstract from '../abstract';
 
-import {humanizeCommentDate} from '../utils/common';
+import {humanizeCommentDate} from '../../utils/common';
 
 const createCommentTemplate = ({
   reaction,

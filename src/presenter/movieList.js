@@ -1,16 +1,19 @@
-import ListView from '../view/films-list';
-import FilmView from '../view/film';
-import ShowMoreView from '../view/show-more-button';
-import FilmDetailsView from '../view/film-details';
+import MovieCard from './movieCard';
 
+import ListView from '../view/films-list';
+import ShowMoreView from '../view/show-more-button';
+
+import {updateItem} from '../utils/common';
 import {render, RenderPosition, remove} from '../utils/render';
 
 const FILMS_COUNT_PER_STEP = 5;
 
 export default class MovieList {
-  constructor(container, listOptions) {
+  constructor(container, listOptions, changeData) {
     this._container = container;
     this._options = listOptions;
+
+    this._changeData = changeData;
 
     this._renderedFilmsCount = FILMS_COUNT_PER_STEP;
 
@@ -18,7 +21,11 @@ export default class MovieList {
     this._listContainer = this._listComponent.getListContainer();
     this._showMoreButtonComponent = new ShowMoreView();
 
+    this._filmPresenters = {};
+
+    this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
+    this._handleModalOpen = this._handleModalOpen.bind(this);
   }
 
   init(films) {
@@ -29,20 +36,11 @@ export default class MovieList {
     this._renderList();
   }
 
-  _renderFilmDetails(filmData) {
-    const filmDetailsComponent = new FilmDetailsView(filmData);
-
-    filmDetailsComponent.setCloseClickHandler();
-
-    render(document.body, filmDetailsComponent, RenderPosition.BEFOREEND);
-  }
-
   _renderFilm(filmData) {
-    const filmComponent = new FilmView(filmData);
+    const filmPresenter = new MovieCard(this._listContainer, this._handleFilmChange, this._handleModalOpen);
 
-    filmComponent.setCardClickHandler(this._renderFilmDetails);
-
-    render(this._listContainer, filmComponent, RenderPosition.BEFOREEND);
+    this._filmPresenters[filmData.id] = filmPresenter;
+    filmPresenter.init(filmData);
   }
 
   _renderFilms(count) {
@@ -83,5 +81,15 @@ export default class MovieList {
     if (renderLoadMore) {
       this._renderShowMoreButton();
     }
+  }
+
+  _handleFilmChange(newFilmData) {
+    this._boardTasks = updateItem(this._films, newFilmData);
+    this._filmPresenters[newFilmData.id].init(newFilmData);
+    this._filmPresenters[newFilmData.id].updateModal(newFilmData);
+  }
+
+  _handleModalOpen() {
+    Object.keys(this._filmPresenters).forEach((id) => this._filmPresenters[id].resetState());
   }
 }
