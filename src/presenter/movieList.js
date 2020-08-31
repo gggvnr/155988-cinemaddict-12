@@ -3,7 +3,6 @@ import MovieCard from './movieCard';
 import ListView from '../view/films-list';
 import ShowMoreView from '../view/show-more-button';
 
-import {UserAction} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
 import MovieDetails from './movieDetails';
 import {filterMap} from '../utils/filter';
@@ -11,7 +10,7 @@ import {filterMap} from '../utils/filter';
 const FILMS_COUNT_PER_STEP = 5;
 
 export default class MovieList {
-  constructor(container, listOptions, moviesModel, filterModel) {
+  constructor(container, listOptions, _handleViewAction, moviesModel, filterModel) {
     this._state = {
       isDetailsOpened: false,
       openedDetailsId: null,
@@ -29,10 +28,9 @@ export default class MovieList {
     this._listContainer = this._listComponent.getListContainer();
     this._showMoreButtonComponent = new ShowMoreView();
 
-    this._handleViewAction = this._handleViewAction.bind(this);
+    this._handleViewAction = _handleViewAction;
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
-    this._handleModalOpen = this._handleModalOpen.bind(this);
 
     this._detailsPresenter = new MovieDetails(this._handleViewAction);
     this._filmPresenters = {};
@@ -108,35 +106,6 @@ export default class MovieList {
     }
   }
 
-  _handleModalOpen() {
-    Object.keys(this._filmPresenters).forEach((id) => this._filmPresenters[id].resetState());
-  }
-
-  _handleViewAction(actionType, updateType, update) {
-    switch (actionType) {
-      case UserAction.UPDATE_FILM:
-        this._moviesModel.updateMovie(updateType, update);
-        break;
-
-      case UserAction.OPEN_DETAILS:
-        this._setState({
-          isDetailsOpened: true,
-          openedDetailsId: update.filmId
-        });
-
-        this._detailsPresenter.show(this._getFilmById(this._state.openedDetailsId));
-        break;
-
-      case UserAction.HIDE_DETAILS:
-        this._setState({
-          isDetailsOpened: false,
-        });
-
-        this._detailsPresenter.hide();
-        break;
-    }
-  }
-
   _handleModelEvent() {
     const {
       isDetailsOpened,
@@ -159,7 +128,6 @@ export default class MovieList {
       .forEach((presenter) => presenter.destroy());
     this._filmPresenters = {};
 
-    // remove(this._noTaskComponent);
     remove(this._showMoreButtonComponent);
 
     if (resetRenderedFilmsCount) {
@@ -173,10 +141,9 @@ export default class MovieList {
     const films = this._getFilms();
     const filmsCount = films.length;
 
-    // if (filmsCount === 0) {
-    //   this._renderNoFilms();
-    //   return;
-    // }
+    if (filmsCount === 0) {
+      return;
+    }
 
     this._renderFilms(films.slice(0, Math.min(filmsCount, this._renderedFilmsCount)));
 
