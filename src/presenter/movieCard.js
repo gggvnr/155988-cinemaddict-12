@@ -1,24 +1,24 @@
-import MovieDetails from './movieDetails';
-
 import FilmView from '../view/film';
 
-import {render, RenderPosition, replace} from '../utils/render';
+import {UserAction, UpdateType} from '../const';
+import {render, RenderPosition, replace, remove} from '../utils/render';
 
 export default class MovieCard {
-  constructor(container, changeData, onModalOpen = () => {}) {
+  constructor(container, handleViewAction = () => {}) {
     this._container = container;
-    this._changeData = changeData;
-    this._onModalOpen = onModalOpen;
+    this._handleViewAction = handleViewAction;
 
     this._filmComponent = null;
-
-    this._filmDetailsPresenter = new MovieDetails(changeData);
   }
 
   init(filmData) {
-    this._filmData = Object.assign({}, filmData);
+    this._filmData = filmData;
 
     this._renderFilm(filmData);
+  }
+
+  destroy() {
+    remove(this._filmComponent);
   }
 
   _renderFilm(filmData) {
@@ -37,7 +37,9 @@ export default class MovieCard {
   }
 
   _handleFavoritesChange() {
-    this._changeData(
+    this._handleViewAction(
+        UserAction.UPDATE_FILM,
+        UpdateType.MAJOR,
         Object.assign(
             {},
             this._filmData,
@@ -49,7 +51,9 @@ export default class MovieCard {
   }
 
   _handleWatchedChange() {
-    this._changeData(
+    this._handleViewAction(
+        UserAction.UPDATE_FILM,
+        UpdateType.MAJOR,
         Object.assign(
             {},
             this._filmData,
@@ -61,7 +65,9 @@ export default class MovieCard {
   }
 
   _handleWatchlistChange() {
-    this._changeData(
+    this._handleViewAction(
+        UserAction.UPDATE_FILM,
+        UpdateType.MAJOR,
         Object.assign(
             {},
             this._filmData,
@@ -80,19 +86,10 @@ export default class MovieCard {
   }
 
   showDetails() {
-    this._onModalOpen();
-    this._filmDetailsPresenter.show(this._filmData);
+    this._handleViewAction(UserAction.OPEN_DETAILS, null, {filmId: this._filmData.id});
   }
 
   hideDetails() {
-    this._filmDetailsPresenter.hide();
-  }
-
-  updateModal(data) {
-    this._filmDetailsPresenter.updateData(data);
-  }
-
-  resetState() {
-    this.hideDetails();
+    this._handleViewAction(UserAction.HIDE_DETAILS);
   }
 }

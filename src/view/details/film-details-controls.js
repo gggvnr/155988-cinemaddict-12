@@ -40,17 +40,17 @@ export default class FilmDetailsControls extends Smart {
 
   _favoritesClickHandler(evt) {
     evt.preventDefault();
-    this._callbacks.favoritesClick(this._data);
+    this._callbacks.favoritesClick();
   }
 
   _watchedClickHandler(evt) {
     evt.preventDefault();
-    this._callbacks.watchedClick(this._data);
+    this._callbacks.watchedClick();
   }
 
   _watchlistClickHandler(evt) {
     evt.preventDefault();
-    this._callbacks.watchlistClick(this._data);
+    this._callbacks.watchlistClick();
   }
 
   restoreHandlers() {

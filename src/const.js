@@ -90,3 +90,13 @@ export const filmsMockData = {
     `Moldova`,
   ],
 };
+
+export const UpdateType = {
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`
+};
+
+export const UserAction = {
+  UPDATE_FILM: `UPDATE_FILM`,
+  OPEN_DETAILS: `OPEN_DETAILS`,
+};

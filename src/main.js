@@ -1,5 +1,7 @@
 import {render, RenderPosition} from './utils/render';
 
+import MoviesModel from './model/moviesModel';
+
 import MovieList from './presenter/movieList';
 
 import BoardView from './view/board';
@@ -20,6 +22,9 @@ const FILMS_COUNT = 20;
 const films = new Array(FILMS_COUNT).fill().map(generateFilm);
 const filters = generateFilters(films);
 const userRankLabel = generateUserRank(films);
+
+const moviesModel = new MoviesModel();
+moviesModel.setMovies(films);
 
 const filmLists = [
   {
@@ -47,7 +52,7 @@ const siteMainElement = document.querySelector(`.main`);
 const statisticsContainer = document.querySelector(`.footer__statistics`);
 
 function renderList(listData) {
-  const listPresenter = new MovieList(boardComponent, listData);
+  const listPresenter = new MovieList(boardComponent, listData, moviesModel);
 
   listPresenter.init(listData.films);
 }
