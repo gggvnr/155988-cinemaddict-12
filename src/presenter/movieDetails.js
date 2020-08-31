@@ -6,6 +6,8 @@ import FilmDetailsComments from '../view/details/film-details-comments';
 import {UserAction, UpdateType} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
 
+import {generateComment} from '../mock/comments';
+
 export default class MovieDetails {
   constructor(handleViewAction) {
     this._filmData = {};
@@ -23,7 +25,8 @@ export default class MovieDetails {
     this._detailsControls.setWatchlistClickHandler(() => this._handleWatchlistChange());
 
     this._detailsComments = new FilmDetailsComments();
-    this._detailsComments.setCommentDeleteHandler((id) => this._handleCommentDelete(id));
+    this._detailsComments.setCommentDeleteHandler((commentId) => this._handleCommentDelete(commentId));
+    this._detailsComments.setCommentAddHandler((commentData) => this._handleCommentAdd(commentData));
   }
 
   _handleFavoritesChange() {
@@ -70,6 +73,32 @@ export default class MovieDetails {
 
   _handleCommentDelete(commentId) {
     const newComments = this._filmData.comments.filter((comment) => comment.id !== commentId);
+
+    this._handleViewAction(
+        UserAction.UPDATE_FILM,
+        UpdateType.MAJOR,
+        Object.assign(
+            {},
+            this._filmData,
+            {
+              comments: newComments,
+            }
+        )
+    );
+  }
+
+  _handleCommentAdd(commentData) {
+    const newComments = [
+      ...this._filmData.comments,
+      Object.assign(
+          {},
+          generateComment(),
+          {
+            reaction: commentData.reaction,
+            text: commentData.text,
+          }
+      )
+    ];
 
     this._handleViewAction(
         UserAction.UPDATE_FILM,

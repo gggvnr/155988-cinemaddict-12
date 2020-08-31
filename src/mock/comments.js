@@ -19,7 +19,7 @@ const reactions = [
   `./images/emoji/sleeping.png`,
 ];
 
-const generateComment = () => {
+export const generateComment = () => {
   return {
     id: generateId(),
     reaction: getRandomArrayItem(reactions),
