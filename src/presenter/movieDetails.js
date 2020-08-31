@@ -23,6 +23,7 @@ export default class MovieDetails {
     this._detailsControls.setWatchlistClickHandler(() => this._handleWatchlistChange());
 
     this._detailsComments = new FilmDetailsComments();
+    this._detailsComments.setCommentDeleteHandler((id) => this._handleCommentDelete(id));
   }
 
   _handleFavoritesChange() {
@@ -62,6 +63,22 @@ export default class MovieDetails {
             this._filmData,
             {
               isInWatchlist: !this._filmData.isInWatchlist,
+            }
+        )
+    );
+  }
+
+  _handleCommentDelete(commentId) {
+    const newComments = this._filmData.comments.filter((comment) => comment.id !== commentId);
+
+    this._handleViewAction(
+        UserAction.UPDATE_FILM,
+        UpdateType.MAJOR,
+        Object.assign(
+            {},
+            this._filmData,
+            {
+              comments: newComments,
             }
         )
     );

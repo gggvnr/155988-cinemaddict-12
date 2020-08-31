@@ -1,4 +1,4 @@
-import {getRandomArrayItem, getRandomDate} from '../utils/common';
+import {getRandomArrayItem, getRandomDate, generateId} from '../utils/common';
 
 const authors = [
   `Tim Macoveev`,
@@ -21,6 +21,7 @@ const reactions = [
 
 const generateComment = () => {
   return {
+    id: generateId(),
     reaction: getRandomArrayItem(reactions),
     author: getRandomArrayItem(authors),
     text: getRandomArrayItem(comments),

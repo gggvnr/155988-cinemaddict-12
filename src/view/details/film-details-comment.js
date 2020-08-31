@@ -3,6 +3,7 @@ import Abstract from '../abstract';
 import {humanizeCommentDate} from '../../utils/common';
 
 const createCommentTemplate = ({
+  id,
   reaction,
   text,
   author,
@@ -18,7 +19,7 @@ const createCommentTemplate = ({
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${humanizeCommentDate(postedAt)}</span>
-          <button class="film-details__comment-delete">Delete</button>
+          <button class="film-details__comment-delete" data-id="${id}">Delete</button>
         </p>
       </div>
     </li>`
