@@ -6,11 +6,12 @@ import ShowMoreView from '../view/show-more-button';
 import {UserAction} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
 import MovieDetails from './movieDetails';
+import {filterMap} from '../utils/filter';
 
 const FILMS_COUNT_PER_STEP = 5;
 
 export default class MovieList {
-  constructor(container, listOptions, moviesModel) {
+  constructor(container, listOptions, moviesModel, filterModel) {
     this._state = {
       isDetailsOpened: false,
       openedDetailsId: null,
@@ -20,6 +21,7 @@ export default class MovieList {
     this._options = listOptions;
 
     this._moviesModel = moviesModel;
+    this._filterModel = filterModel;
 
     this._renderedFilmsCount = FILMS_COUNT_PER_STEP;
 
@@ -40,6 +42,7 @@ export default class MovieList {
     render(this._container, this._listComponent, RenderPosition.BEFOREEND);
 
     this._moviesModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
 
     this._renderList();
   }
@@ -50,6 +53,7 @@ export default class MovieList {
     remove(this._listComponent);
 
     this._moviesModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   _setState(newState) {
@@ -57,7 +61,11 @@ export default class MovieList {
   }
 
   _getFilms() {
-    return this._moviesModel.getMovies();
+    const filterType = this._filterModel.getFilter();
+    const movies = this._moviesModel.getMovies();
+    const filteredMovies = filterMap[filterType](movies);
+
+    return filteredMovies;
   }
 
   _getFilmById(id) {

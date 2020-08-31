@@ -1,8 +1,10 @@
 import {render, RenderPosition} from './utils/render';
 
 import MoviesModel from './model/moviesModel';
+import FilterModel from './model/filterModel';
 
 import MovieList from './presenter/movieList';
+import FilterPresenter from './presenter/filter';
 
 import BoardView from './view/board';
 import UserRankView from './view/user-rank';
@@ -11,7 +13,6 @@ import SortingView from './view/sorting';
 import FooterStatisticsView from './view/footer-statistics';
 
 import {generateFilm} from './mock/film';
-import {generateFilters} from './mock/filter';
 import {generateUserRank} from './mock/user-rank';
 import {generateExtraLists} from './mock/extra';
 
@@ -20,11 +21,12 @@ import {extraListsTitles} from './const';
 const FILMS_COUNT = 20;
 
 const films = new Array(FILMS_COUNT).fill().map(generateFilm);
-const filters = generateFilters(films);
 const userRankLabel = generateUserRank(films);
 
 const moviesModel = new MoviesModel();
+const filterModel = new FilterModel();
 moviesModel.setMovies(films);
+
 
 const filmLists = [
   {
@@ -41,7 +43,7 @@ const filmLists = [
 ];
 
 const userRankComponent = new UserRankView(userRankLabel);
-const navComponent = new NavView(filters);
+const navComponent = new NavView();
 const sortingComponent = new SortingView();
 const boardComponent = new BoardView();
 
@@ -52,7 +54,7 @@ const siteMainElement = document.querySelector(`.main`);
 const statisticsContainer = document.querySelector(`.footer__statistics`);
 
 function renderList(listData) {
-  const listPresenter = new MovieList(boardComponent, listData, moviesModel);
+  const listPresenter = new MovieList(boardComponent, listData, moviesModel, filterModel);
 
   listPresenter.init(listData.films);
 }
@@ -60,8 +62,11 @@ function renderList(listData) {
 render(siteHeaderElement, userRankComponent, RenderPosition.BEFOREEND);
 render(siteMainElement, navComponent, RenderPosition.BEFOREEND);
 render(siteMainElement, sortingComponent, RenderPosition.BEFOREEND);
-render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
 
+const filterPresenter = new FilterPresenter(navComponent, filterModel, moviesModel);
+filterPresenter.init();
+
+render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
 filmLists.forEach((listData) => renderList(listData));
 
 render(statisticsContainer, footerStatisticsComponent, RenderPosition.BEFOREEND);

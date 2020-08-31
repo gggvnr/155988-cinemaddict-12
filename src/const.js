@@ -17,32 +17,6 @@ export const extraListsTitles = {
   [EXTRA_LIST_MOST_COMMENTED_KEY]: `Most commented`,
 };
 
-export const filterTypeKeys = {
-  ALL: `all`,
-  WATCHLIST: `watchlist`,
-  HISTORY: `history`,
-  FAVORITES: `favorites`,
-};
-
-export const filterTypes = {
-  [filterTypeKeys.ALL]: {
-    link: `#all`,
-    label: `All Items`,
-  },
-  [filterTypeKeys.WATCHLIST]: {
-    link: `#watchilst`,
-    label: `Watchlist`,
-  },
-  [filterTypeKeys.HISTORY]: {
-    link: `#watchilst`,
-    label: `History`,
-  },
-  [filterTypeKeys.FAVORITES]: {
-    link: `#watchilst`,
-    label: `Favorites`,
-  },
-};
-
 export const filmsMockData = {
   titles: [
     `Made for each other`,
@@ -99,4 +73,11 @@ export const UpdateType = {
 export const UserAction = {
   UPDATE_FILM: `UPDATE_FILM`,
   OPEN_DETAILS: `OPEN_DETAILS`,
+};
+
+export const FilterType = {
+  ALL: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`,
 };
