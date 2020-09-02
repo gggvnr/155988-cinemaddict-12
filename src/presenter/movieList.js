@@ -5,9 +5,7 @@ import ShowMoreView from '../view/show-more-button';
 
 import {render, RenderPosition, remove} from '../utils/render';
 import {filterMap} from '../utils/filter';
-import {UpdateType} from '../const';
-
-const FILMS_COUNT_PER_STEP = 5;
+import {UpdateType, ExtraListTypes} from '../const';
 
 export default class MovieList {
   constructor(container, listOptions, _handleViewAction, moviesModel, filterModel) {
@@ -17,7 +15,8 @@ export default class MovieList {
     this._moviesModel = moviesModel;
     this._filterModel = filterModel;
 
-    this._renderedFilmsCount = FILMS_COUNT_PER_STEP;
+    this._originFilmsCount = listOptions.filmsToRender;
+    this._renderedFilmsCount = this._originFilmsCount;
 
     this._listComponent = new ListView(listOptions);
     this._listContainer = this._listComponent.getListContainer();
@@ -55,13 +54,30 @@ export default class MovieList {
   _getFilms() {
     const filterType = this._filterModel.getFilter();
     const movies = this._moviesModel.getMovies();
+
+    if (this._options.isExtraList) {
+      return this._getExtraFilms(this._options.type, movies);
+    }
+
     const filteredMovies = filterMap[filterType](movies);
 
     return filteredMovies;
   }
 
-  _getFilmById(id) {
-    return this._moviesModel.getMovies().find((movie) => movie.id === id);
+  _getExtraFilms(type, films) {
+    let resultFilms;
+
+    switch (type) {
+      case ExtraListTypes.TOP_RATED:
+        resultFilms = [...films].sort((a, b) => b.rating - a.rating);
+        break;
+
+      case ExtraListTypes.MOST_COMMENTED:
+        resultFilms = [...films].sort((a, b) => b.comments.length - a.comments.length);
+        break;
+    }
+
+    return resultFilms;
   }
 
   _renderFilm(filmData) {
@@ -76,7 +92,7 @@ export default class MovieList {
   }
 
   _handleShowMoreButtonClick() {
-    this._renderedFilmsCount += FILMS_COUNT_PER_STEP;
+    this._renderedFilmsCount += this._originFilmsCount;
 
     this._clearList();
     this._renderList();
@@ -124,9 +140,9 @@ export default class MovieList {
     remove(this._showMoreButtonComponent);
 
     if (resetRenderedFilmsCount) {
-      this._renderedFilmsCount = FILMS_COUNT_PER_STEP;
+      this._renderedFilmsCount = this._originFilmsCount;
     } else {
-      this._renderedTaskCount = Math.min(filmsCount, this._renderedTaskCount);
+      this._renderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount);
     }
   }
 

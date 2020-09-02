@@ -57,6 +57,11 @@ export const filmsMockData = {
   ],
 };
 
+export const ExtraListTypes = {
+  TOP_RATED: `topRated`,
+  MOST_COMMENTED: `mostCommented`,
+};
+
 export const KeyCodes = {
   ENTER: 13,
   ESC: 27,

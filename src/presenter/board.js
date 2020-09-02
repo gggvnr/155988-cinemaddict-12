@@ -3,7 +3,7 @@ import MovieDetails from './movieDetails';
 
 import BoardView from '../view/board';
 
-import {UserAction} from '../const';
+import {UserAction, ExtraListTypes} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
 import {filterMap} from '../utils/filter';
 
@@ -13,16 +13,21 @@ const filmListsOptions = [
     title: `All movies. Upcoming`,
     isTitleHidden: true,
     renderLoadMore: true,
+    filmsToRender: 5,
   },
   {
-    type: `topRated`,
+    type: ExtraListTypes.TOP_RATED,
     title: `Top rated`,
     className: `films-list--extra`,
+    isExtraList: true,
+    filmsToRender: 2,
   },
   {
-    type: `mostCommented`,
+    type: ExtraListTypes.MOST_COMMENTED,
     title: `Most commented`,
     className: `films-list--extra`,
+    isExtraList: true,
+    filmsToRender: 2,
   },
 ];
 
