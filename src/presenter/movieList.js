@@ -107,8 +107,7 @@ export default class MovieList {
         this._renderList();
         break;
       case UpdateType.MAJOR:
-        this._clearList();
-        this._renderedFilmsCount = FILMS_COUNT_PER_STEP;
+        this._clearList({resetRenderedFilmsCount: true});
         this._renderList();
         break;
     }
