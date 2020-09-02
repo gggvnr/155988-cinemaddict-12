@@ -32,7 +32,7 @@ export default class MovieDetails {
   _handleFavoritesChange() {
     this._handleViewAction(
         UserAction.UPDATE_FILM,
-        UpdateType.MAJOR,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._filmData,
@@ -46,7 +46,7 @@ export default class MovieDetails {
   _handleWatchedChange() {
     this._handleViewAction(
         UserAction.UPDATE_FILM,
-        UpdateType.MAJOR,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._filmData,
@@ -60,7 +60,7 @@ export default class MovieDetails {
   _handleWatchlistChange() {
     this._handleViewAction(
         UserAction.UPDATE_FILM,
-        UpdateType.MAJOR,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._filmData,
@@ -76,7 +76,7 @@ export default class MovieDetails {
 
     this._handleViewAction(
         UserAction.UPDATE_FILM,
-        UpdateType.MAJOR,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._filmData,
@@ -102,7 +102,7 @@ export default class MovieDetails {
 
     this._handleViewAction(
         UserAction.UPDATE_FILM,
-        UpdateType.MAJOR,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._filmData,

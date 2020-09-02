@@ -4,18 +4,13 @@ import ListView from '../view/films-list';
 import ShowMoreView from '../view/show-more-button';
 
 import {render, RenderPosition, remove} from '../utils/render';
-import MovieDetails from './movieDetails';
 import {filterMap} from '../utils/filter';
+import {UpdateType} from '../const';
 
 const FILMS_COUNT_PER_STEP = 5;
 
 export default class MovieList {
   constructor(container, listOptions, _handleViewAction, moviesModel, filterModel) {
-    this._state = {
-      isDetailsOpened: false,
-      openedDetailsId: null,
-    };
-
     this._container = container;
     this._options = listOptions;
 
@@ -32,7 +27,6 @@ export default class MovieList {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
 
-    this._detailsPresenter = new MovieDetails(this._handleViewAction);
     this._filmPresenters = {};
   }
 
@@ -106,17 +100,17 @@ export default class MovieList {
     }
   }
 
-  _handleModelEvent() {
-    const {
-      isDetailsOpened,
-      openedDetailsId,
-    } = this._state;
-
-    this._clearList();
-    this._renderList();
-
-    if (isDetailsOpened) {
-      this._detailsPresenter.updateData(this._getFilmById(openedDetailsId));
+  _handleModelEvent(updateType) {
+    switch (updateType) {
+      case UpdateType.MINOR:
+        this._clearList();
+        this._renderList();
+        break;
+      case UpdateType.MAJOR:
+        this._clearList();
+        this._renderedFilmsCount = FILMS_COUNT_PER_STEP;
+        this._renderList();
+        break;
     }
   }
 

@@ -2,7 +2,7 @@ import Smart from '../smart';
 
 import CommentView from './film-details-comment';
 
-const ENTER_KEYCODE = 13;
+import {KeyCodes} from '../../const';
 
 export const createFilmDetailsCommentsTemplate = ({
   comments = [],
@@ -116,7 +116,7 @@ export default class FilmDetailsComments extends Smart {
   }
 
   _commentAddHandler(e) {
-    if (e.keyCode === ENTER_KEYCODE && e.metaKey) {
+    if (e.keyCode === KeyCodes.ENTER && (e.metaKey || e.ctrlKey)) {
       const commentText = e.target.value;
 
       this._callbacks.commentAdd({

@@ -39,7 +39,7 @@ export default class MovieCard {
   _handleFavoritesChange() {
     this._handleViewAction(
         UserAction.UPDATE_FILM,
-        UpdateType.MAJOR,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._filmData,
@@ -53,7 +53,7 @@ export default class MovieCard {
   _handleWatchedChange() {
     this._handleViewAction(
         UserAction.UPDATE_FILM,
-        UpdateType.MAJOR,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._filmData,
@@ -67,7 +67,7 @@ export default class MovieCard {
   _handleWatchlistChange() {
     this._handleViewAction(
         UserAction.UPDATE_FILM,
-        UpdateType.MAJOR,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._filmData,

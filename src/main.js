@@ -3,7 +3,7 @@ import {render, RenderPosition} from './utils/render';
 import MoviesModel from './model/moviesModel';
 import FilterModel from './model/filterModel';
 
-import Board from './presenter/board';
+import BoardPresenter from './presenter/board';
 import FilterPresenter from './presenter/filter';
 
 import UserRankView from './view/user-rank';
@@ -38,7 +38,7 @@ render(siteMainElement, navComponent, RenderPosition.BEFOREEND);
 render(siteMainElement, sortingComponent, RenderPosition.BEFOREEND);
 
 const filterPresenter = new FilterPresenter(navComponent, filterModel, moviesModel);
-const boardPresenter = new Board(siteMainElement, moviesModel, filterModel);
+const boardPresenter = new BoardPresenter(siteMainElement, moviesModel, filterModel);
 
 filterPresenter.init();
 boardPresenter.init();
