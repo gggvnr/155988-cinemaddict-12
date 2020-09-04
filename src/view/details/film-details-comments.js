@@ -2,6 +2,8 @@ import Smart from '../smart';
 
 import CommentView from './film-details-comment';
 
+import {KeyCodes} from '../../const';
+
 export const createFilmDetailsCommentsTemplate = ({
   comments = [],
   selectedEmoji = ``,
@@ -79,6 +81,8 @@ export default class FilmDetailsComments extends Smart {
     this._element = this.getElement();
 
     this._emojiChangeHandler = this._emojiChangeHandler.bind(this);
+    this._commentDeleteHandler = this._commentDeleteHandler.bind(this);
+    this._commentAddHandler = this._commentAddHandler.bind(this);
   }
 
   getTemplate() {
@@ -103,8 +107,29 @@ export default class FilmDetailsComments extends Smart {
     );
   }
 
+  _commentDeleteHandler(e) {
+    e.preventDefault();
+
+    const id = Number(e.target.dataset.id);
+
+    this._callbacks.commentDelete(id);
+  }
+
+  _commentAddHandler(e) {
+    if (e.keyCode === KeyCodes.ENTER && (e.metaKey || e.ctrlKey)) {
+      const commentText = e.target.value;
+
+      this._callbacks.commentAdd({
+        text: commentText,
+        reaction: `images/emoji/${this._data.selectedEmoji || `smile`}.png`,
+      });
+    }
+  }
+
   restoreHandlers() {
     this.setEmojiChangeHandler(this._callbacks.emojiChange);
+    this.setCommentDeleteHandler(this._callbacks.commentDelete);
+    this.setCommentAddHandler(this._callbacks.commentAdd);
   }
 
   setEmojiChangeHandler(callback) {
@@ -115,5 +140,23 @@ export default class FilmDetailsComments extends Smart {
     this._emojiItems.forEach((emojiItem) => {
       emojiItem.addEventListener(`change`, this._emojiChangeHandler);
     });
+  }
+
+  setCommentDeleteHandler(callback) {
+    this._callbacks.commentDelete = callback;
+
+    this._commentDeleteButtons = this._element.querySelectorAll(`.film-details__comment-delete`);
+
+    this._commentDeleteButtons.forEach((button) => {
+      button.addEventListener(`click`, this._commentDeleteHandler);
+    });
+  }
+
+  setCommentAddHandler(callback) {
+    this._callbacks.commentAdd = callback;
+
+    this._commentAddInput = this._element.querySelector(`.film-details__comment-input`);
+
+    this._commentAddInput.addEventListener(`keydown`, this._commentAddHandler);
   }
 }

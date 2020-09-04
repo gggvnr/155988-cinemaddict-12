@@ -3,29 +3,36 @@ import FilmDetailsTopData from '../view/details/film-details-top-data';
 import FilmDetailsControls from '../view/details/film-details-controls';
 import FilmDetailsComments from '../view/details/film-details-comments';
 
+import {UserAction, UpdateType} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
 
+import {generateComment} from '../mock/comments';
+
 export default class MovieDetails {
-  constructor(changeData) {
-    this._changeData = changeData;
+  constructor(handleViewAction) {
+    this._filmData = {};
+
+    this._handleViewAction = handleViewAction;
 
     this._detailsContainer = new FilmDetailsContainer();
 
-    this._detailsTopData = new FilmDetailsTopData(this._filmData);
+    this._detailsTopData = new FilmDetailsTopData();
     this._detailsTopData.setCloseClickHandler(() => this.hide());
 
-    this._detailsControls = new FilmDetailsControls(this._filmData);
+    this._detailsControls = new FilmDetailsControls();
     this._detailsControls.setFavoritesClickHandler(() => this._handleFavoritesChange());
     this._detailsControls.setWatchedClickHandler(() => this._handleWatchedChange());
     this._detailsControls.setWatchlistClickHandler(() => this._handleWatchlistChange());
 
-    this._detailsComments = new FilmDetailsComments(this._filmData);
-
-    this.updateData = this.updateData.bind(this);
+    this._detailsComments = new FilmDetailsComments();
+    this._detailsComments.setCommentDeleteHandler((commentId) => this._handleCommentDelete(commentId));
+    this._detailsComments.setCommentAddHandler((commentData) => this._handleCommentAdd(commentData));
   }
 
   _handleFavoritesChange() {
-    this._changeData(
+    this._handleViewAction(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._filmData,
@@ -37,7 +44,9 @@ export default class MovieDetails {
   }
 
   _handleWatchedChange() {
-    this._changeData(
+    this._handleViewAction(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._filmData,
@@ -49,12 +58,56 @@ export default class MovieDetails {
   }
 
   _handleWatchlistChange() {
-    this._changeData(
+    this._handleViewAction(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._filmData,
             {
               isInWatchlist: !this._filmData.isInWatchlist,
+            }
+        )
+    );
+  }
+
+  _handleCommentDelete(commentId) {
+    const newComments = this._filmData.comments.filter((comment) => comment.id !== commentId);
+
+    this._handleViewAction(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
+        Object.assign(
+            {},
+            this._filmData,
+            {
+              comments: newComments,
+            }
+        )
+    );
+  }
+
+  _handleCommentAdd(commentData) {
+    const newComments = [
+      ...this._filmData.comments,
+      Object.assign(
+          {},
+          generateComment(),
+          {
+            reaction: commentData.reaction,
+            text: commentData.text,
+          }
+      )
+    ];
+
+    this._handleViewAction(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
+        Object.assign(
+            {},
+            this._filmData,
+            {
+              comments: newComments,
             }
         )
     );
@@ -73,6 +126,7 @@ export default class MovieDetails {
 
   updateData(data) {
     this._filmData = data;
+
     this._detailsTopData.updateData(data);
     this._detailsControls.updateData(data);
     this._detailsComments.updateData(data);
