@@ -3,7 +3,7 @@ import MovieDetails from './movieDetails';
 
 import BoardView from '../view/board';
 
-import {UserAction, ExtraListTypes} from '../const';
+import {UserAction, ExtraListTypes, UpdateType} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
 import {filterMap} from '../utils/filter';
 
@@ -32,11 +32,14 @@ const filmListsOptions = [
 ];
 
 export default class Board {
-  constructor(container, moviesModel, filterModel) {
+  constructor(container, moviesModel, filterModel, api) {
     this._state = {
       isDetailsOpened: false,
       openedDetailsId: null,
+      isLoading: true,
     };
+
+    this._api = api;
 
     this._moviesModel = moviesModel;
     this._filterModel = filterModel;
@@ -103,7 +106,13 @@ export default class Board {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this._moviesModel.updateMovie(updateType, update);
+        this._api.updateFilm(update)
+        .then((response) => {
+          this._moviesModel.updateMovie(updateType, response);
+        })
+        .catch(() => {
+
+        });
         break;
 
       case UserAction.OPEN_DETAILS:
@@ -125,7 +134,7 @@ export default class Board {
     }
   }
 
-  _handleModelEvent() {
+  _handleModelEvent(updateType) {
     const {
       isDetailsOpened,
       openedDetailsId,
@@ -133,6 +142,18 @@ export default class Board {
 
     if (isDetailsOpened) {
       this._detailsPresenter.updateData(this._getFilmById(openedDetailsId));
+    }
+
+    switch (updateType) {
+      case UpdateType.INIT:
+        this._state.isLoading = false;
+        // remove(this._loadingComponent);
+        this._renderBoard();
+        break;
+
+      case UpdateType.COMMENTS_LOADED:
+        this._detailsPresenter.updateData(this._getFilmById(openedDetailsId));
+        break;
     }
   }
 
@@ -149,7 +170,16 @@ export default class Board {
 
   }
 
+  _renderLoading() {
+
+  }
+
   _renderBoard() {
+    if (this._state.isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     const films = this._getFilms();
     const filmsCount = films.length;
 

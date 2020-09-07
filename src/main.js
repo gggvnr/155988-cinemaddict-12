@@ -1,5 +1,7 @@
 import {render, RenderPosition} from './utils/render';
 
+import Api from './api';
+
 import MoviesModel from './model/moviesModel';
 import FilterModel from './model/filterModel';
 
@@ -11,23 +13,21 @@ import NavView from './view/nav';
 import SortingView from './view/sorting';
 import FooterStatisticsView from './view/footer-statistics';
 
-import {generateFilm} from './mock/film';
-import {generateUserRank} from './mock/user-rank';
+import {UpdateType} from './const';
 
-const FILMS_COUNT = 20;
+const AUTHORIZATION = `Basic gN2ss3ddSwcl2sa1j`;
+const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
 
-const films = new Array(FILMS_COUNT).fill().map(generateFilm);
-const userRankLabel = generateUserRank(films);
+const api = new Api(END_POINT, AUTHORIZATION);
+
+const userRankLabel = `test`;
 
 const moviesModel = new MoviesModel();
 const filterModel = new FilterModel();
-moviesModel.setMovies(films);
 
 const userRankComponent = new UserRankView(userRankLabel);
 const navComponent = new NavView();
 const sortingComponent = new SortingView();
-
-const footerStatisticsComponent = new FooterStatisticsView(films.length);
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
@@ -38,9 +38,21 @@ render(siteMainElement, navComponent, RenderPosition.BEFOREEND);
 render(siteMainElement, sortingComponent, RenderPosition.BEFOREEND);
 
 const filterPresenter = new FilterPresenter(navComponent, filterModel, moviesModel);
-const boardPresenter = new BoardPresenter(siteMainElement, moviesModel, filterModel);
+const boardPresenter = new BoardPresenter(siteMainElement, moviesModel, filterModel, api);
 
 filterPresenter.init();
 boardPresenter.init();
 
-render(statisticsContainer, footerStatisticsComponent, RenderPosition.BEFOREEND);
+api.getFilms()
+  .then((films) => {
+    const footerStatisticsComponent = new FooterStatisticsView(films.length);
+
+    render(statisticsContainer, footerStatisticsComponent, RenderPosition.BEFOREEND);
+    moviesModel.setMovies(UpdateType.INIT, films);
+  })
+  .catch(() => {
+    const footerStatisticsComponent = new FooterStatisticsView(0);
+
+    render(statisticsContainer, footerStatisticsComponent, RenderPosition.BEFOREEND);
+    moviesModel.setMovies(UpdateType.INIT, []);
+  });
