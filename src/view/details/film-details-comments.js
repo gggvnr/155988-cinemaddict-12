@@ -5,18 +5,18 @@ import CommentView from './film-details-comment';
 import {KeyCodes} from '../../const';
 
 export const createFilmDetailsCommentsTemplate = ({
-  comments = [],
+  commentsData = [],
   selectedEmoji = ``,
 }) => {
   return (
     `<div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
         <h3 class="film-details__comments-title">
-          Comments <span class="film-details__comments-count">${comments.length}</span>
+          Comments <span class="film-details__comments-count">${commentsData.length}</span>
         </h3>
 
         <ul class="film-details__comments-list">
-    ${comments.map((comment) => {
+    ${commentsData.map((comment) => {
       const commentComponent = new CommentView(comment);
 
       return commentComponent.getTemplate();

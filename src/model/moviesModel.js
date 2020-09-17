@@ -88,4 +88,14 @@ export default class MoviesModel extends Observer {
       }
     };
   }
+
+  static adaptCommentToClient(comment) {
+    return {
+      id: comment.id,
+      reaction: comment.emotion,
+      author: comment.author,
+      text: comment.comment,
+      postedAt: new Date(comment.date),
+    };
+  }
 }

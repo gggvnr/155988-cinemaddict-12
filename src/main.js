@@ -43,7 +43,7 @@ const boardPresenter = new BoardPresenter(siteMainElement, moviesModel, filterMo
 filterPresenter.init();
 boardPresenter.init();
 
-api.getFilms()
+api.getFilmsWithComments()
   .then((films) => {
     const footerStatisticsComponent = new FooterStatisticsView(films.length);
 

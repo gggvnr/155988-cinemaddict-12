@@ -14,7 +14,7 @@ const createCommentTemplate = ({
   return (
     `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
-        <img src="${reaction}" width="55" height="55" alt="emoji-smile">
+        <img src="/images/emoji/${reaction}.png" width="55" height="55" alt="emoji-smile">
       </span>
       <div>
         <p class="film-details__comment-text">${he.encode(text)}</p>
@@ -33,6 +33,21 @@ export default class Comment extends Abstract {
     super();
 
     this._comment = commentData;
+    this._deleteClickHandler = this._deleteClickHandler.bind(this);
+  }
+
+  _deleteClickHandler(evt) {
+    evt.preventDefault();
+
+    const id = evt.target.dataset.id;
+
+    this._callbacks.deleteClick(id);
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callbacks.deleteClick = callback;
+    this._deleteButton = this._element.querySelector(`.film-details__comment-delete`);
+    this._deleteButton.addEventListener(`click`, this._deleteClickHandler);
   }
 
   getTemplate() {

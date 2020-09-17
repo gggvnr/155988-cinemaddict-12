@@ -24,6 +24,22 @@ export default class Api {
       .then((films) => films.map(MoviesModel.adaptToClient));
   }
 
+  getFilmsWithComments() {
+    return this.getFilms()
+      .then((films) => Promise.all(films.map((film) => {
+        return this.getComments(film)
+          .then((commentsData) => {
+            return Object.assign(
+                film,
+                {},
+                {
+                  commentsData,
+                }
+            );
+          });
+      })));
+  }
+
   updateFilm(film) {
     return this._load({
       url: `movies/${film.id}`,
@@ -32,13 +48,27 @@ export default class Api {
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then(Api.toJSON)
-      .then(MoviesModel.adaptToClient);
+      .then(MoviesModel.adaptToClient)
+      .then((adaptedFilm) => this.getFilmComments(adaptedFilm));
   }
 
   getComments(film) {
     return this._load({url: `comments/${film.id}`})
       .then(Api.toJSON)
-      .then((comments) => comments.map(MoviesModel.adaptCommentsToClient));
+      .then((comments) => comments.map(MoviesModel.adaptCommentToClient));
+  }
+
+  getFilmComments(film) {
+    return this.getComments(film)
+      .then((commentsData) => {
+        return Object.assign(
+            film,
+            {},
+            {
+              commentsData,
+            }
+        );
+      });
   }
 
   addComment(comment) {
