@@ -121,7 +121,8 @@ export default class FilmDetailsComments extends Smart {
 
       this._callbacks.commentAdd({
         text: commentText,
-        reaction: `images/emoji/${this._data.selectedEmoji || `smile`}.png`,
+        reaction: this._data.selectedEmoji || `smile`,
+        postedAt: new Date().toISOString(),
       });
     }
   }

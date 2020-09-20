@@ -71,15 +71,21 @@ export default class Api {
       });
   }
 
-  addComment(comment) {
+  addComment(comment, filmId) {
     return this._load({
-      url: `comments`,
+      url: `comments/${filmId}`,
       method: Method.POST,
-      body: JSON.stringify(MoviesModel.adaptToServer(comment)),
+      body: JSON.stringify(MoviesModel.adaptCommentToServer(comment)),
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then(Api.toJSON)
-      .then(MoviesModel.adaptToClient);
+      .then((response) => (Object.assign(
+          {},
+          MoviesModel.adaptToClient(response.movie),
+          {
+            commentsData: response.comments.map(MoviesModel.adaptCommentToClient)
+          }
+      )));
   }
 
   deleteComment(commentId) {

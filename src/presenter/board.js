@@ -116,7 +116,7 @@ export default class Board {
         });
         break;
 
-      case UserAction.DELETE_COMMENT:
+      case UserAction.DELETE_COMMENT: {
         const currentFilmData = this._getFilms()
           .find((film) => film.comments.find((comment) => comment === update) === update);
 
@@ -130,6 +130,18 @@ export default class Board {
 
         });
         break;
+      }
+
+      case UserAction.ADD_COMMENT: {
+        this._api.addComment(update.comment, update.filmId)
+        .then((response) => {
+          this._moviesModel.updateMovie(updateType, response);
+        })
+        .catch(() => {
+
+        });
+        break;
+      }
 
       case UserAction.OPEN_DETAILS:
         this._setState({

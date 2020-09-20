@@ -6,8 +6,6 @@ import FilmDetailsComments from '../view/details/film-details-comments';
 import {UserAction, UpdateType} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
 
-import {generateComment} from '../mock/comments';
-
 export default class MovieDetails {
   constructor(handleViewAction) {
     this._filmData = {};
@@ -80,28 +78,13 @@ export default class MovieDetails {
   }
 
   _handleCommentAdd(commentData) {
-    const newComments = [
-      ...this._filmData.comments,
-      Object.assign(
-          {},
-          generateComment(),
-          {
-            reaction: commentData.reaction,
-            text: commentData.text,
-          }
-      )
-    ];
-
     this._handleViewAction(
-        UserAction.UPDATE_FILM,
+        UserAction.ADD_COMMENT,
         UpdateType.MINOR,
-        Object.assign(
-            {},
-            this._filmData,
-            {
-              comments: newComments,
-            }
-        )
+        {
+          filmId: this._filmData.id,
+          comment: commentData,
+        }
     );
   }
 

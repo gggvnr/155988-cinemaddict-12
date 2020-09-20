@@ -98,4 +98,12 @@ export default class MoviesModel extends Observer {
       postedAt: new Date(comment.date),
     };
   }
+
+  static adaptCommentToServer(comment) {
+    return {
+      "comment": comment.text,
+      "date": comment.postedAt,
+      "emotion": comment.reaction,
+    };
+  }
 }
