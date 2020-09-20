@@ -82,9 +82,9 @@ export default class Api {
       .then(MoviesModel.adaptToClient);
   }
 
-  deleteComment(comment) {
+  deleteComment(commentId) {
     return this._load({
-      url: `comments/${comment.id}`,
+      url: `comments/${commentId}`,
       method: Method.DELETE
     });
   }

@@ -16,6 +16,17 @@ export const updateItem = (items, update) => {
   ];
 };
 
+export const deleteFilmComment = (film, commentId) => {
+  return Object.assign(
+      film,
+      {},
+      {
+        comments: film.comments.filter((comment) => comment !== commentId),
+        commentsData: film.commentsData.filter((comment) => comment.id !== commentId),
+      }
+  );
+};
+
 // Функция из интернета по генерации случайного числа из диапазона
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
 export const getRandomInteger = (a = 0, b = 1) => {

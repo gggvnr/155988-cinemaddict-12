@@ -6,6 +6,7 @@ import BoardView from '../view/board';
 import {UserAction, ExtraListTypes, UpdateType} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
 import {filterMap} from '../utils/filter';
+import {deleteFilmComment} from '../utils/common';
 
 const filmListsOptions = [
   {
@@ -109,6 +110,21 @@ export default class Board {
         this._api.updateFilm(update)
         .then((response) => {
           this._moviesModel.updateMovie(updateType, response);
+        })
+        .catch(() => {
+
+        });
+        break;
+
+      case UserAction.DELETE_COMMENT:
+        const currentFilmData = this._getFilms()
+          .find((film) => film.comments.find((comment) => comment === update) === update);
+
+        this._api.deleteComment(update)
+        .then(() => {
+          const newFilmData = deleteFilmComment(currentFilmData, update);
+
+          this._moviesModel.updateMovie(updateType, newFilmData);
         })
         .catch(() => {
 

@@ -74,6 +74,8 @@ export const UpdateType = {
 
 export const UserAction = {
   UPDATE_FILM: `UPDATE_FILM`,
+  DELETE_COMMENT: `DELETE_COMMENT`,
+  ADD_FILM: `ADD_COMMENT`,
   OPEN_DETAILS: `OPEN_DETAILS`,
 };
 

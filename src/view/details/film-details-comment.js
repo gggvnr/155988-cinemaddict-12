@@ -33,21 +33,6 @@ export default class Comment extends Abstract {
     super();
 
     this._comment = commentData;
-    this._deleteClickHandler = this._deleteClickHandler.bind(this);
-  }
-
-  _deleteClickHandler(evt) {
-    evt.preventDefault();
-
-    const id = evt.target.dataset.id;
-
-    this._callbacks.deleteClick(id);
-  }
-
-  setDeleteClickHandler(callback) {
-    this._callbacks.deleteClick = callback;
-    this._deleteButton = this._element.querySelector(`.film-details__comment-delete`);
-    this._deleteButton.addEventListener(`click`, this._deleteClickHandler);
   }
 
   getTemplate() {

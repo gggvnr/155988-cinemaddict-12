@@ -110,7 +110,7 @@ export default class FilmDetailsComments extends Smart {
   _commentDeleteHandler(e) {
     e.preventDefault();
 
-    const id = Number(e.target.dataset.id);
+    const id = e.target.dataset.id;
 
     this._callbacks.commentDelete(id);
   }

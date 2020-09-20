@@ -72,18 +72,10 @@ export default class MovieDetails {
   }
 
   _handleCommentDelete(commentId) {
-    const newComments = this._filmData.comments.filter((comment) => comment.id !== commentId);
-
     this._handleViewAction(
-        UserAction.UPDATE_FILM,
+        UserAction.DELETE_COMMENT,
         UpdateType.MINOR,
-        Object.assign(
-            {},
-            this._filmData,
-            {
-              comments: newComments,
-            }
-        )
+        commentId
     );
   }
 
