@@ -2,6 +2,7 @@ import MovieList from './movieList';
 import MovieDetails from './movieDetails';
 
 import BoardView from '../view/board';
+import IndexLoadingView from '../view/index-loading';
 
 import {UserAction, ExtraListTypes, UpdateType} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
@@ -47,6 +48,7 @@ export default class Board {
 
     this._container = container;
     this._boardComponent = new BoardView();
+    this._loadingComponent = new IndexLoadingView();
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -175,7 +177,7 @@ export default class Board {
     switch (updateType) {
       case UpdateType.INIT:
         this._state.isLoading = false;
-        // remove(this._loadingComponent);
+        remove(this._loadingComponent);
         this._renderBoard();
         break;
 
@@ -199,7 +201,7 @@ export default class Board {
   }
 
   _renderLoading() {
-
+    render(this._boardComponent, this._loadingComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderBoard() {
