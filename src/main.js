@@ -1,4 +1,4 @@
-import {render, RenderPosition} from './utils/render';
+import {render, RenderPosition, remove} from './utils/render';
 
 import MoviesModel from './model/moviesModel';
 import FilterModel from './model/filterModel';
@@ -10,14 +10,17 @@ import UserRankView from './view/user-rank';
 import NavView from './view/nav';
 import SortingView from './view/sorting';
 import FooterStatisticsView from './view/footer-statistics';
+import StatisticsView from './view/statistics';
 
 import {generateFilm} from './mock/film';
-import {generateUserRank} from './mock/user-rank';
+
+import {getUserRank} from './utils/common';
+import {MenuItem} from './const';
 
 const FILMS_COUNT = 20;
 
 const films = new Array(FILMS_COUNT).fill().map(generateFilm);
-const userRankLabel = generateUserRank(films);
+const userRankLabel = getUserRank(films);
 
 const moviesModel = new MoviesModel();
 const filterModel = new FilterModel();
@@ -39,6 +42,23 @@ render(siteMainElement, sortingComponent, RenderPosition.BEFOREEND);
 
 const filterPresenter = new FilterPresenter(navComponent, filterModel, moviesModel);
 const boardPresenter = new BoardPresenter(siteMainElement, moviesModel, filterModel);
+
+let statisticsComponent = null;
+
+const handleSiteMenuClick = (menuItem) => {
+  if (menuItem === MenuItem.STATISTICS) {
+    boardPresenter.destroy();
+    statisticsComponent = new StatisticsView(moviesModel.getMovies());
+    render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
+  } else {
+    boardPresenter.init();
+    if (statisticsComponent) {
+      remove(statisticsComponent);
+    }
+  }
+};
+
+navComponent.setMenuClickHandler(handleSiteMenuClick);
 
 filterPresenter.init();
 boardPresenter.init();
