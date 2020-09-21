@@ -26,18 +26,6 @@ const generateRating = () => {
   return getRandomInteger(0, MAX_RATING_IN_PERCENTS) / 10;
 };
 
-const generateDuration = () => {
-  const duration = {
-    h: getRandomInteger(0, 30),
-    m: getRandomInteger(0, 60),
-  };
-
-  return Object.entries(duration)
-    .map(([key, value]) => value ? `${value}${key}` : ``)
-    .filter(Boolean)
-    .join(` `);
-};
-
 export const generateFilm = () => {
   return {
     id: generateId(),
@@ -46,12 +34,13 @@ export const generateFilm = () => {
     description: generateDescription(),
     rating: generateRating(),
     date: getRandomDate(new Date(`1950-02-12`), new Date()),
-    duration: generateDuration(),
+    duration: getRandomInteger(0, 300),
     genre: getRandomArrayItem(filmsMockData.genres),
     filmDetails: generateFilmDetails(),
     comments: generateComments(getRandomInteger(0, 5)),
     isInWatchlist: Boolean(getRandomInteger(0, 1)),
     isWatched: Boolean(getRandomInteger(0, 1)),
     isFavorite: Boolean(getRandomInteger(0, 1)),
+    watchingDate: getRandomDate(new Date(`2020-02-12`), new Date()).toISOString(),
   };
 };

@@ -1,6 +1,6 @@
 import Abstract from './abstract';
 
-import {truncateString} from '../utils/common';
+import {truncateString, getFormattedDuration} from '../utils/common';
 
 const MAX_DESCRIPTION_LENGTH = 140;
 
@@ -32,7 +32,7 @@ export const createFilmTemplate = ({
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${year}</span>
-        <span class="film-card__duration">${duration}</span>
+        <span class="film-card__duration">${getFormattedDuration(duration)}</span>
         <span class="film-card__genre">${genre}</span>
       </p>
       <img src="${poster}" alt="" class="film-card__poster">
