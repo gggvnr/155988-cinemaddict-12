@@ -1,4 +1,5 @@
 import moment from 'moment';
+import {userRankStrings} from '../const';
 
 export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
@@ -69,4 +70,22 @@ export const humanizeCommentDate = (date) => {
   return duration.asWeeks() >= -1
     ? duration.humanize(true)
     : moment(date).format(`YYYY/MM/DD HH:MM`);
+};
+
+export const getFormattedDuration = (duration, format = `HH[h] MM[m]`) => moment.utc().startOf(`day`).add(duration, `minutes`).format(format);
+
+
+export const getUserRank = (films) => {
+  const count = films.filter((film) => film.isWatched).length;
+
+  if (count > 0 && count <= 10) {
+    return userRankStrings.NOVICE;
+  }
+  if (count > 10 && count <= 20) {
+    return userRankStrings.FAN;
+  }
+  if (count > 20) {
+    return userRankStrings.MOVIE_BUFF;
+  }
+  return ``;
 };

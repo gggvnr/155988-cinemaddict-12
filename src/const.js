@@ -85,3 +85,7 @@ export const FilterType = {
   HISTORY: `history`,
   FAVORITES: `favorites`,
 };
+
+export const MenuItem = {
+  STATISTICS: `#stats`
+};

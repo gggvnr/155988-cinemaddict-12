@@ -193,7 +193,7 @@ export default class Board {
       .forEach((presenter) => presenter.destroy());
     this._listPresenters = {};
 
-    remove(this._noFilmsComponent);
+    // remove(this._noFilmsComponent);
   }
 
   _renderNoFilms() {
