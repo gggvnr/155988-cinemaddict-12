@@ -2,10 +2,12 @@ import MovieList from './movieList';
 import MovieDetails from './movieDetails';
 
 import BoardView from '../view/board';
+import IndexLoadingView from '../view/index-loading';
 
-import {UserAction, ExtraListTypes} from '../const';
+import {UserAction, ExtraListTypes, UpdateType} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
 import {filterMap} from '../utils/filter';
+import {deleteFilmComment} from '../utils/common';
 
 const filmListsOptions = [
   {
@@ -32,22 +34,26 @@ const filmListsOptions = [
 ];
 
 export default class Board {
-  constructor(container, moviesModel, filterModel) {
+  constructor(container, moviesModel, filterModel, api) {
     this._state = {
       isDetailsOpened: false,
       openedDetailsId: null,
+      isLoading: true,
     };
+
+    this._api = api;
 
     this._moviesModel = moviesModel;
     this._filterModel = filterModel;
 
     this._container = container;
     this._boardComponent = new BoardView();
+    this._loadingComponent = new IndexLoadingView();
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
 
-    this._detailsPresenter = new MovieDetails(this._handleViewAction);
+    this._detailsPresenter = new MovieDetails(this._handleViewAction, api);
     this._listPresenters = {};
   }
 
@@ -103,8 +109,49 @@ export default class Board {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this._moviesModel.updateMovie(updateType, update);
+        this._api.updateFilm(update)
+        .then((response) => {
+          this._moviesModel.updateMovie(updateType, response);
+        });
         break;
+
+      case UserAction.LOAD_COMMENTS: {
+        this._api.getComments(update)
+        .then((commentsData) => {
+          this._moviesModel.updateMovie(
+              updateType,
+              Object.assign(
+                  update,
+                  {},
+                  {
+                    commentsData,
+                  }
+              )
+          );
+        });
+        break;
+      }
+
+      case UserAction.DELETE_COMMENT: {
+        const currentFilmData = this._getFilms()
+          .find((film) => film.comments.find((comment) => comment === update) === update);
+
+        this._api.deleteComment(update)
+        .then(() => {
+          const newFilmData = deleteFilmComment(currentFilmData, update);
+
+          this._moviesModel.updateMovie(updateType, newFilmData);
+        });
+        break;
+      }
+
+      case UserAction.ADD_COMMENT: {
+        this._api.addComment(update.comment, update.filmId)
+        .then((response) => {
+          this._moviesModel.updateMovie(updateType, response);
+        });
+        break;
+      }
 
       case UserAction.OPEN_DETAILS:
         this._setState({
@@ -125,7 +172,7 @@ export default class Board {
     }
   }
 
-  _handleModelEvent() {
+  _handleModelEvent(updateType) {
     const {
       isDetailsOpened,
       openedDetailsId,
@@ -133,6 +180,14 @@ export default class Board {
 
     if (isDetailsOpened) {
       this._detailsPresenter.updateData(this._getFilmById(openedDetailsId));
+    }
+
+    switch (updateType) {
+      case UpdateType.INIT:
+        this._state.isLoading = false;
+        remove(this._loadingComponent);
+        this._renderBoard();
+        break;
     }
   }
 
@@ -149,7 +204,16 @@ export default class Board {
 
   }
 
+  _renderLoading() {
+    render(this._boardComponent, this._loadingComponent, RenderPosition.AFTERBEGIN);
+  }
+
   _renderBoard() {
+    if (this._state.isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     const films = this._getFilms();
     const filmsCount = films.length;
 

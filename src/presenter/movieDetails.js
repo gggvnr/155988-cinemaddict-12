@@ -6,10 +6,9 @@ import FilmDetailsComments from '../view/details/film-details-comments';
 import {UserAction, UpdateType} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
 
-import {generateComment} from '../mock/comments';
-
 export default class MovieDetails {
-  constructor(handleViewAction) {
+  constructor(handleViewAction, api) {
+    this._api = api;
     this._filmData = {};
 
     this._handleViewAction = handleViewAction;
@@ -51,6 +50,7 @@ export default class MovieDetails {
             {},
             this._filmData,
             {
+              watchingDate: new Date().toISOString(),
               isWatched: !this._filmData.isWatched,
             }
         )
@@ -72,49 +72,28 @@ export default class MovieDetails {
   }
 
   _handleCommentDelete(commentId) {
-    const newComments = this._filmData.comments.filter((comment) => comment.id !== commentId);
-
     this._handleViewAction(
-        UserAction.UPDATE_FILM,
+        UserAction.DELETE_COMMENT,
         UpdateType.MINOR,
-        Object.assign(
-            {},
-            this._filmData,
-            {
-              comments: newComments,
-            }
-        )
+        commentId
     );
   }
 
   _handleCommentAdd(commentData) {
-    const newComments = [
-      ...this._filmData.comments,
-      Object.assign(
-          {},
-          generateComment(),
-          {
-            reaction: commentData.reaction,
-            text: commentData.text,
-          }
-      )
-    ];
-
     this._handleViewAction(
-        UserAction.UPDATE_FILM,
+        UserAction.ADD_COMMENT,
         UpdateType.MINOR,
-        Object.assign(
-            {},
-            this._filmData,
-            {
-              comments: newComments,
-            }
-        )
+        {
+          filmId: this._filmData.id,
+          comment: commentData,
+        }
     );
   }
 
   show(filmData) {
     this._filmData = filmData;
+
+    this._handleViewAction(UserAction.LOAD_COMMENTS, UpdateType.MINOR, filmData);
 
     this.updateData(filmData);
 

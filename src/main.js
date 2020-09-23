@@ -1,54 +1,53 @@
 import {render, RenderPosition, remove} from './utils/render';
 
+import Api from './api';
+
 import MoviesModel from './model/moviesModel';
 import FilterModel from './model/filterModel';
 
 import BoardPresenter from './presenter/board';
 import FilterPresenter from './presenter/filter';
+import UserRankPresenter from './presenter/user-rank';
 
-import UserRankView from './view/user-rank';
 import NavView from './view/nav';
 import SortingView from './view/sorting';
 import FooterStatisticsView from './view/footer-statistics';
 import StatisticsView from './view/statistics';
 
-import {generateFilm} from './mock/film';
-
-import {getUserRank} from './utils/common';
+import {UpdateType} from './const';
 import {MenuItem} from './const';
 
-const FILMS_COUNT = 20;
+const AUTHORIZATION = `Basic gN2ss3ddSwcl2sa1j`;
+const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
 
-const films = new Array(FILMS_COUNT).fill().map(generateFilm);
-const userRankLabel = getUserRank(films);
+
+const api = new Api(END_POINT, AUTHORIZATION);
 
 const moviesModel = new MoviesModel();
 const filterModel = new FilterModel();
-moviesModel.setMovies(films);
 
-const userRankComponent = new UserRankView(userRankLabel);
 const navComponent = new NavView();
 const sortingComponent = new SortingView();
-
-const footerStatisticsComponent = new FooterStatisticsView(films.length);
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const statisticsContainer = document.querySelector(`.footer__statistics`);
 
-render(siteHeaderElement, userRankComponent, RenderPosition.BEFOREEND);
 render(siteMainElement, navComponent, RenderPosition.BEFOREEND);
 render(siteMainElement, sortingComponent, RenderPosition.BEFOREEND);
 
+const userRankPresenter = new UserRankPresenter(siteHeaderElement, moviesModel);
 const filterPresenter = new FilterPresenter(navComponent, filterModel, moviesModel);
-const boardPresenter = new BoardPresenter(siteMainElement, moviesModel, filterModel);
+const boardPresenter = new BoardPresenter(siteMainElement, moviesModel, filterModel, api);
 
 let statisticsComponent = null;
 
 const handleSiteMenuClick = (menuItem) => {
   if (menuItem === MenuItem.STATISTICS) {
+    const watchedFilms = moviesModel.getMovies().filter((film) => film.isWatched);
+
     boardPresenter.destroy();
-    statisticsComponent = new StatisticsView(moviesModel.getMovies());
+    statisticsComponent = new StatisticsView(watchedFilms);
     render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
   } else {
     boardPresenter.init();
@@ -60,7 +59,20 @@ const handleSiteMenuClick = (menuItem) => {
 
 navComponent.setMenuClickHandler(handleSiteMenuClick);
 
+userRankPresenter.init();
 filterPresenter.init();
 boardPresenter.init();
 
-render(statisticsContainer, footerStatisticsComponent, RenderPosition.BEFOREEND);
+api.getFilms()
+  .then((films) => {
+    const footerStatisticsComponent = new FooterStatisticsView(films.length);
+
+    render(statisticsContainer, footerStatisticsComponent, RenderPosition.BEFOREEND);
+    moviesModel.setMovies(UpdateType.INIT, films);
+  })
+  .catch(() => {
+    const footerStatisticsComponent = new FooterStatisticsView(0);
+
+    render(statisticsContainer, footerStatisticsComponent, RenderPosition.BEFOREEND);
+    moviesModel.setMovies(UpdateType.INIT, []);
+  });
