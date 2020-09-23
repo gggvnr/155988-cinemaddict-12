@@ -53,7 +53,7 @@ export default class Board {
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
 
-    this._detailsPresenter = new MovieDetails(this._handleViewAction);
+    this._detailsPresenter = new MovieDetails(this._handleViewAction, api);
     this._listPresenters = {};
   }
 
@@ -112,11 +112,25 @@ export default class Board {
         this._api.updateFilm(update)
         .then((response) => {
           this._moviesModel.updateMovie(updateType, response);
-        })
-        .catch(() => {
-
         });
         break;
+
+      case UserAction.LOAD_COMMENTS: {
+        this._api.getComments(update)
+        .then((commentsData) => {
+          this._moviesModel.updateMovie(
+              updateType,
+              Object.assign(
+                  update,
+                  {},
+                  {
+                    commentsData,
+                  }
+              )
+          );
+        });
+        break;
+      }
 
       case UserAction.DELETE_COMMENT: {
         const currentFilmData = this._getFilms()
@@ -127,9 +141,6 @@ export default class Board {
           const newFilmData = deleteFilmComment(currentFilmData, update);
 
           this._moviesModel.updateMovie(updateType, newFilmData);
-        })
-        .catch(() => {
-
         });
         break;
       }
@@ -138,9 +149,6 @@ export default class Board {
         this._api.addComment(update.comment, update.filmId)
         .then((response) => {
           this._moviesModel.updateMovie(updateType, response);
-        })
-        .catch(() => {
-
         });
         break;
       }
@@ -179,10 +187,6 @@ export default class Board {
         this._state.isLoading = false;
         remove(this._loadingComponent);
         this._renderBoard();
-        break;
-
-      case UpdateType.COMMENTS_LOADED:
-        this._detailsPresenter.updateData(this._getFilmById(openedDetailsId));
         break;
     }
   }

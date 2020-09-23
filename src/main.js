@@ -63,7 +63,7 @@ userRankPresenter.init();
 filterPresenter.init();
 boardPresenter.init();
 
-api.getFilmsWithComments()
+api.getFilms()
   .then((films) => {
     const footerStatisticsComponent = new FooterStatisticsView(films.length);
 

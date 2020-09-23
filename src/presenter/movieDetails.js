@@ -7,7 +7,8 @@ import {UserAction, UpdateType} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
 
 export default class MovieDetails {
-  constructor(handleViewAction) {
+  constructor(handleViewAction, api) {
+    this._api = api;
     this._filmData = {};
 
     this._handleViewAction = handleViewAction;
@@ -49,6 +50,7 @@ export default class MovieDetails {
             {},
             this._filmData,
             {
+              watchingDate: new Date().toISOString(),
               isWatched: !this._filmData.isWatched,
             }
         )
@@ -90,6 +92,8 @@ export default class MovieDetails {
 
   show(filmData) {
     this._filmData = filmData;
+
+    this._handleViewAction(UserAction.LOAD_COMMENTS, UpdateType.MINOR, filmData);
 
     this.updateData(filmData);
 

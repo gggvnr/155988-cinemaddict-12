@@ -53,6 +53,7 @@ export default class MoviesModel extends Observer {
       },
       comments: movie.comments,
       commentsData: [],
+      watchingDate: movie.user_details.watching_date,
       isInWatchlist: movie.user_details.watchlist,
       isWatched: movie.user_details.already_watched,
       isFavorite: movie.user_details.favorite,
@@ -83,7 +84,7 @@ export default class MoviesModel extends Observer {
       'user_details': {
         'already_watched': movie.isWatched,
         'favorite': movie.isFavorite,
-        'watching_date': `2020-02-21T18:05:01.636Z`,
+        'watching_date': movie.watchingDate,
         'watchlist': movie.isInWatchlist,
       }
     };
