@@ -65,7 +65,9 @@ export const humanizeDate = (date) => {
 };
 
 export const humanizeCommentDate = (date) => {
-  const duration = moment.duration(date.getTime() - Date.now(), `milliseconds`);
+  const currentDate = date instanceof Date ? date : new Date(date);
+
+  const duration = moment.duration(currentDate.getTime() - Date.now(), `milliseconds`);
 
   return duration.asWeeks() >= -1
     ? duration.humanize(true)

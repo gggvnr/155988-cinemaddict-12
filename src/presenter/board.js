@@ -110,25 +110,19 @@ export default class Board {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         this._api.updateFilm(update)
-        .then((response) => {
-          this._moviesModel.updateMovie(updateType, response);
-        });
+          .then((response) => {
+            this._moviesModel.updateMovie(updateType, response);
+          });
         break;
 
       case UserAction.LOAD_COMMENTS: {
-        this._api.getComments(update)
-        .then((commentsData) => {
-          this._moviesModel.updateMovie(
-              updateType,
-              Object.assign(
-                  update,
-                  {},
-                  {
-                    commentsData,
-                  }
-              )
-          );
-        });
+        this._api.getFilmComments(update)
+          .then((filmWithComments) => {
+            this._moviesModel.updateMovie(
+                updateType,
+                filmWithComments
+            );
+          });
         break;
       }
 
@@ -137,19 +131,19 @@ export default class Board {
           .find((film) => film.comments.find((comment) => comment === update) === update);
 
         this._api.deleteComment(update)
-        .then(() => {
-          const newFilmData = deleteFilmComment(currentFilmData, update);
+          .then(() => {
+            const newFilmData = deleteFilmComment(currentFilmData, update);
 
-          this._moviesModel.updateMovie(updateType, newFilmData);
-        });
+            this._moviesModel.updateMovie(updateType, newFilmData);
+          });
         break;
       }
 
       case UserAction.ADD_COMMENT: {
         this._api.addComment(update.comment, update.filmId)
-        .then((response) => {
-          this._moviesModel.updateMovie(updateType, response);
-        });
+          .then((response) => {
+            this._moviesModel.updateMovie(updateType, response);
+          });
         break;
       }
 
