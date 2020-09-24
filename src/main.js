@@ -1,6 +1,8 @@
 import {render, RenderPosition, remove} from './utils/render';
 
-import Api from './api';
+import Api from './api/index';
+import Store from './api/store';
+import Provider from './api/provider';
 
 import MoviesModel from './model/moviesModel';
 import FilterModel from './model/filterModel';
@@ -19,9 +21,13 @@ import {MenuItem} from './const';
 
 const AUTHORIZATION = `Basic gN2ss3ddSwcl2sa1j`;
 const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
-
+const STORE_PREFIX = `cinemaddict-localstorage`;
+const STORE_VER = `v12`;
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 const api = new Api(END_POINT, AUTHORIZATION);
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
 
 const moviesModel = new MoviesModel();
 const filterModel = new FilterModel();
@@ -38,7 +44,7 @@ render(siteMainElement, sortingComponent, RenderPosition.BEFOREEND);
 
 const userRankPresenter = new UserRankPresenter(siteHeaderElement, moviesModel);
 const filterPresenter = new FilterPresenter(navComponent, filterModel, moviesModel);
-const boardPresenter = new BoardPresenter(siteMainElement, moviesModel, filterModel, api);
+const boardPresenter = new BoardPresenter(siteMainElement, moviesModel, filterModel, apiWithProvider);
 
 let statisticsComponent = null;
 
@@ -63,7 +69,7 @@ userRankPresenter.init();
 filterPresenter.init();
 boardPresenter.init();
 
-api.getFilms()
+apiWithProvider.getFilms()
   .then((films) => {
     const footerStatisticsComponent = new FooterStatisticsView(films.length);
 
@@ -76,3 +82,21 @@ api.getFilms()
     render(statisticsContainer, footerStatisticsComponent, RenderPosition.BEFOREEND);
     moviesModel.setMovies(UpdateType.INIT, []);
   });
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`)
+    .then(() => {
+      console.log(`ServiceWorker available`); // eslint-disable-line
+    }).catch(() => {
+      console.error(`ServiceWorker isn't available`); // eslint-disable-line
+    });
+});
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+  apiWithProvider.sync();
+});
+
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
+});

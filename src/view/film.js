@@ -9,7 +9,7 @@ export const createFilmTemplate = ({
   poster = ``,
   description = ``,
   rating = 0,
-  date = new Date(),
+  date = new Date().toISOString(),
   duration = ``,
   genre = ``,
   comments = [],
@@ -17,7 +17,7 @@ export const createFilmTemplate = ({
   isWatched,
   isFavorite,
 }) => {
-  const year = date.getFullYear();
+  const year = new Date(date).getFullYear();
   const truncatedDescription = truncateString(description, MAX_DESCRIPTION_LENGTH);
 
   const controlActiveClassname = `film-card__controls-item--active`;
