@@ -3,7 +3,7 @@ import FilmDetailsTopData from '../view/details/film-details-top-data';
 import FilmDetailsControls from '../view/details/film-details-controls';
 import FilmDetailsComments from '../view/details/film-details-comments';
 
-import {UserAction, UpdateType} from '../const';
+import {UserAction, UpdateType, KeyCodes} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
 
 export default class MovieDetails {
@@ -26,6 +26,15 @@ export default class MovieDetails {
     this._detailsComments = new FilmDetailsComments();
     this._detailsComments.setCommentDeleteHandler((commentId) => this._handleCommentDelete(commentId));
     this._detailsComments.setCommentAddHandler((commentData) => this._handleCommentAdd(commentData));
+
+    this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+  }
+
+  _escKeyDownHandler(evt) {
+    if (evt.keyCode === KeyCodes.ESC) {
+      evt.preventDefault();
+      this.hide();
+    }
   }
 
   _handleFavoritesChange() {
@@ -101,6 +110,8 @@ export default class MovieDetails {
     render(this._detailsContainer, this._detailsTopData, RenderPosition.BEFOREEND);
     render(this._detailsContainer, this._detailsControls, RenderPosition.BEFOREEND);
     render(this._detailsContainer, this._detailsComments, RenderPosition.BEFOREEND);
+
+    document.addEventListener(`keydown`, this._escKeyDownHandler);
   }
 
   updateData(data) {
@@ -114,6 +125,7 @@ export default class MovieDetails {
   hide() {
     if (this._detailsContainer) {
       remove(this._detailsContainer);
+      document.removeEventListener(`keydown`, this._escKeyDownHandler);
     }
   }
 }
