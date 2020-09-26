@@ -3,6 +3,7 @@ import MovieDetails from './movieDetails';
 
 import BoardView from '../view/board';
 import IndexLoadingView from '../view/index-loading';
+import IndexNoDataView from '../view/index-no-data';
 
 import {UserAction, ExtraListTypes, UpdateType} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
@@ -49,6 +50,7 @@ export default class Board {
     this._container = container;
     this._boardComponent = new BoardView();
     this._loadingComponent = new IndexLoadingView();
+    this._noDataComponent = new IndexNoDataView();
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -191,11 +193,11 @@ export default class Board {
       .forEach((presenter) => presenter.destroy());
     this._listPresenters = {};
 
-    // remove(this._noFilmsComponent);
+    remove(this._noDataComponent);
   }
 
   _renderNoFilms() {
-
+    render(this._boardComponent, this._noDataComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderLoading() {
