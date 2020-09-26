@@ -5,15 +5,17 @@ import ShowMoreView from '../view/show-more-button';
 
 import {render, RenderPosition, remove} from '../utils/render';
 import {filterMap} from '../utils/filter';
-import {UpdateType, ExtraListTypes} from '../const';
+import {sortByDate, sortByRating} from '../utils/sort';
+import {UpdateType, ExtraListTypes, SortType} from '../const';
 
 export default class MovieList {
-  constructor(container, listOptions, _handleViewAction, moviesModel, filterModel) {
+  constructor(container, listOptions, _handleViewAction, moviesModel, filterModel, sortingModel) {
     this._container = container;
     this._options = listOptions;
 
     this._moviesModel = moviesModel;
     this._filterModel = filterModel;
+    this._sortingModel = sortingModel;
 
     this._originFilmsCount = listOptions.filmsToRender;
     this._renderedFilmsCount = this._originFilmsCount;
@@ -34,6 +36,7 @@ export default class MovieList {
 
     this._moviesModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+    this._sortingModel.addObserver(this._handleModelEvent);
 
     this._renderList();
   }
@@ -45,6 +48,7 @@ export default class MovieList {
 
     this._moviesModel.removeObserver(this._handleModelEvent);
     this._filterModel.removeObserver(this._handleModelEvent);
+    this._sortingModel.removeObserver(this._handleModelEvent);
   }
 
   _setState(newState) {
@@ -54,12 +58,24 @@ export default class MovieList {
   _getFilms() {
     const filterType = this._filterModel.getFilter();
     const movies = this._moviesModel.getMovies();
+    const sorting = this._sortingModel.getSorting();
 
     if (this._options.isExtraList) {
       return this._getExtraFilms(this._options.type, movies);
     }
 
     const filteredMovies = filterMap[filterType](movies);
+
+    switch (sorting) {
+      case SortType.DATE:
+        filteredMovies.sort(sortByDate);
+        break;
+      case SortType.RATING:
+        filteredMovies.sort(sortByRating);
+        break;
+      default:
+        break;
+    }
 
     return filteredMovies;
   }
@@ -123,6 +139,7 @@ export default class MovieList {
         this._renderList();
         break;
       case UpdateType.MAJOR:
+        this._sortingModel.resetSorting();
         this._clearList({resetRenderedFilmsCount: true});
         this._renderList();
         break;

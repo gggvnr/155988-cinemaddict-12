@@ -80,6 +80,12 @@ export const UserAction = {
   OPEN_DETAILS: `OPEN_DETAILS`,
 };
 
+export const SortType = {
+  DEFAULT: `default`,
+  DATE: `date`,
+  RATING: `rating`
+};
+
 export const FilterType = {
   ALL: `all`,
   WATCHLIST: `watchlist`,
