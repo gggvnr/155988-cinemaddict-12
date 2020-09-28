@@ -5,7 +5,7 @@ import BoardView from '../view/board';
 import IndexLoadingView from '../view/index-loading';
 import IndexNoDataView from '../view/index-no-data';
 
-import {UserAction, ExtraListTypes, UpdateType} from '../const';
+import {UserAction, ExtraListTypes, UpdateType, DetailsViewState} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
 import {filterMap} from '../utils/filter';
 import {deleteFilmComment} from '../utils/common';
@@ -119,7 +119,7 @@ export default class Board {
           });
         break;
 
-      case UserAction.LOAD_COMMENTS: {
+      case UserAction.LOAD_COMMENTS:
         this._api.getFilmComments(update)
           .then((filmWithComments) => {
             this._moviesModel.updateMovie(
@@ -128,25 +128,37 @@ export default class Board {
             );
           });
         break;
-      }
 
       case UserAction.DELETE_COMMENT: {
         const currentFilmData = this._getFilms()
           .find((film) => film.comments.find((comment) => comment === update) === update);
 
+        this._detailsPresenter.setViewState(DetailsViewState.COMMENT_DELETE_PENDING, {
+          commentId: update
+        });
         this._api.deleteComment(update)
           .then(() => {
             const newFilmData = deleteFilmComment(currentFilmData, update);
 
             this._moviesModel.updateMovie(updateType, newFilmData);
+          })
+          .catch(() => {
+            this._detailsPresenter.setViewState(DetailsViewState.COMMENT_DELETE_ABORTING, {
+              commentId: update
+            });
           });
         break;
       }
 
       case UserAction.ADD_COMMENT: {
+        this._detailsPresenter.setViewState(DetailsViewState.FORM_PENDING);
         this._api.addComment(update.comment, update.filmId)
           .then((response) => {
+            this._detailsPresenter.setViewState();
             this._moviesModel.updateMovie(updateType, response);
+          })
+          .catch(() => {
+            this._detailsPresenter.setViewState(DetailsViewState.FORM_ABORTING);
           });
         break;
       }

@@ -43,3 +43,10 @@ export const FilterType = {
 export const MenuItem = {
   STATISTICS: `#stats`
 };
+
+export const DetailsViewState = {
+  FORM_PENDING: `FORM_PENDING`,
+  FORM_ABORTING: `FORM_ABORTING`,
+  COMMENT_DELETE_PENDING: `COMMENT_DELETE_PENDING`,
+  COMMENT_DELETE_ABORTING: `COMMENT_DELETE_ABORTING`,
+};

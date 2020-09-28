@@ -3,7 +3,7 @@ import FilmDetailsTopData from '../view/details/film-details-top-data';
 import FilmDetailsControls from '../view/details/film-details-controls';
 import FilmDetailsComments from '../view/details/film-details-comments';
 
-import {UserAction, UpdateType, KeyCodes} from '../const';
+import {UserAction, UpdateType, KeyCodes, DetailsViewState} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
 
 export default class MovieDetails {
@@ -99,6 +99,38 @@ export default class MovieDetails {
     );
   }
 
+  setViewState(viewState, data) {
+    this._detailsComments.updateData({
+      isFormPending: false,
+      isFormAborting: false,
+      pendingCommentId: null,
+      abortingCommentId: null,
+    });
+
+    switch (viewState) {
+      case DetailsViewState.FORM_PENDING:
+        this._detailsComments.updateData({
+          isFormPending: true,
+        });
+        break;
+      case DetailsViewState.FORM_ABORTING:
+        this._detailsComments.updateData({
+          isFormAborting: true,
+        });
+        break;
+      case DetailsViewState.COMMENT_DELETE_PENDING:
+        this._detailsComments.updateData({
+          pendingCommentId: data.commentId
+        });
+        break;
+      case DetailsViewState.COMMENT_DELETE_ABORTING:
+        this._detailsComments.updateData({
+          abortingCommentId: data.commentId
+        });
+        break;
+    }
+  }
+
   show(filmData) {
     this._filmData = filmData;
 
@@ -119,7 +151,9 @@ export default class MovieDetails {
 
     this._detailsTopData.updateData(data);
     this._detailsControls.updateData(data);
-    this._detailsComments.updateData(data);
+    this._detailsComments.updateData({
+      commentsData: data.commentsData,
+    });
   }
 
   hide() {
