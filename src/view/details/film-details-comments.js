@@ -7,6 +7,9 @@ import {KeyCodes} from '../../const';
 export const createFilmDetailsCommentsTemplate = ({
   commentsData = [],
   selectedEmoji = ``,
+  isFormAborting,
+  pendingCommentId,
+  abortingCommentId,
 }) => {
   return (
     `<div class="form-details__bottom-container">
@@ -17,13 +20,13 @@ export const createFilmDetailsCommentsTemplate = ({
 
         <ul class="film-details__comments-list">
     ${commentsData.map((comment) => {
-      const commentComponent = new CommentView(comment);
+      const commentComponent = new CommentView(comment, pendingCommentId, abortingCommentId);
 
       return commentComponent.getTemplate();
     }).join(``)}
         </ul>
 
-        <div class="film-details__new-comment">
+        <div class="film-details__new-comment ${isFormAborting ? `shake` : ``}">
           <div for="add-emoji" class="film-details__add-emoji-label">
             ${renderEmojiImage(selectedEmoji)}
           </div>
@@ -74,8 +77,12 @@ export default class FilmDetailsComments extends Smart {
     super();
 
     this._data = {
-      comments: [],
+      commentsData: [],
       selectedEmoji: ``,
+      isFormPending: false,
+      isFormAborting: false,
+      pendingCommentId: null,
+      abortingCommentId: null,
     };
 
     this._element = this.getElement();
@@ -116,6 +123,10 @@ export default class FilmDetailsComments extends Smart {
   }
 
   _commentAddHandler(e) {
+    if (this._data.isFormPending) {
+      return;
+    }
+
     if (e.keyCode === KeyCodes.ENTER && (e.metaKey || e.ctrlKey)) {
       const commentText = e.target.value;
 
