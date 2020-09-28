@@ -32,6 +32,12 @@ export default class MovieList {
   }
 
   init() {
+    const filmsCount = this._getFilms().length;
+
+    if (filmsCount === 0) {
+      return;
+    }
+
     render(this._container, this._listComponent, RenderPosition.BEFOREEND);
 
     this._moviesModel.addObserver(this._handleModelEvent);
