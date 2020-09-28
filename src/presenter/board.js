@@ -35,7 +35,7 @@ const filmListsOptions = [
 ];
 
 export default class Board {
-  constructor(container, moviesModel, filterModel, api) {
+  constructor(container, moviesModel, filterModel, sortingModel, api) {
     this._state = {
       isDetailsOpened: false,
       openedDetailsId: null,
@@ -46,6 +46,7 @@ export default class Board {
 
     this._moviesModel = moviesModel;
     this._filterModel = filterModel;
+    this._sortingModel = sortingModel;
 
     this._container = container;
     this._boardComponent = new BoardView();
@@ -101,7 +102,8 @@ export default class Board {
         listOptions,
         this._handleViewAction,
         this._moviesModel,
-        this._filterModel
+        this._filterModel,
+        this._sortingModel
     );
 
     this._listPresenters[listOptions.type] = listPresenter;
