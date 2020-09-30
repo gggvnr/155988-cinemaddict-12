@@ -1,3 +1,5 @@
+import Provider from '../../api/provider';
+
 import Smart from '../smart';
 
 import CommentView from './film-details-comment';
@@ -123,7 +125,7 @@ export default class FilmDetailsComments extends Smart {
   }
 
   _commentAddHandler(e) {
-    if (this._data.isFormPending) {
+    if (this._data.isFormPending || !Provider.isOnline()) {
       return;
     }
 

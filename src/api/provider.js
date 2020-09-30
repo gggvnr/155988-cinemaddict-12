@@ -1,4 +1,4 @@
-import MoviesModel from '../model/moviesModel';
+import MoviesModel from '../model/movies-model';
 
 const createStoreStructure = (items) => {
   return items.reduce((acc, current) => {
@@ -41,10 +41,6 @@ export default class Provider {
     this._store.setItem(film.id, Object.assign({}, film));
 
     return Promise.resolve(film);
-  }
-
-  getComments(film) {
-    return this._api.getComments(film);
   }
 
   getFilmComments(film) {

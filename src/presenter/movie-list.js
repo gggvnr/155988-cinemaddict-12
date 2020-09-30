@@ -1,4 +1,4 @@
-import MovieCard from './movieCard';
+import MovieCard from './movie-card';
 
 import ListView from '../view/films-list';
 import ShowMoreView from '../view/show-more-button';
@@ -55,10 +55,6 @@ export default class MovieList {
     this._moviesModel.removeObserver(this._handleModelEvent);
     this._filterModel.removeObserver(this._handleModelEvent);
     this._sortingModel.removeObserver(this._handleModelEvent);
-  }
-
-  _setState(newState) {
-    this._state = newState;
   }
 
   _getFilms() {
@@ -124,18 +120,6 @@ export default class MovieList {
     render(this._listComponent, this._showMoreButtonComponent, RenderPosition.BEFOREEND);
 
     this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
-  }
-
-  _renderList() {
-    const {
-      renderLoadMore,
-    } = this._options;
-
-    this._renderFilms(this._renderedFilmsCount);
-
-    if (renderLoadMore) {
-      this._renderShowMoreButton();
-    }
   }
 
   _handleModelEvent(updateType) {

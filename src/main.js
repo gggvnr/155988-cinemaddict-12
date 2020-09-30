@@ -4,9 +4,9 @@ import Api from './api/index';
 import Store from './api/store';
 import Provider from './api/provider';
 
-import MoviesModel from './model/moviesModel';
-import FilterModel from './model/filterModel';
-import SortingModel from './model/sortingModel';
+import MoviesModel from './model/movies-model';
+import FilterModel from './model/filter-model';
+import SortingModel from './model/sorting-model';
 
 import BoardPresenter from './presenter/board';
 import FilterPresenter from './presenter/filter';

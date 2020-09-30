@@ -1,5 +1,5 @@
-import MovieList from './movieList';
-import MovieDetails from './movieDetails';
+import MovieList from './movie-list';
+import MovieDetails from './movie-details';
 
 import BoardView from '../view/board';
 import IndexLoadingView from '../view/index-loading';
@@ -7,7 +7,6 @@ import IndexNoDataView from '../view/index-no-data';
 
 import {UserAction, ExtraListTypes, UpdateType, DetailsViewState} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
-import {filterMap} from '../utils/filter';
 import {deleteFilmComment} from '../utils/common';
 
 const filmListsOptions = [
@@ -56,7 +55,7 @@ export default class Board {
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
 
-    this._detailsPresenter = new MovieDetails(this._handleViewAction, api);
+    this._detailsPresenter = new MovieDetails(this._handleViewAction);
     this._listPresenters = {};
   }
 
@@ -82,14 +81,6 @@ export default class Board {
 
   _getFilms() {
     return this._moviesModel.getMovies();
-  }
-
-  _getFilteredAndSortedFilms() {
-    const filterType = this._filterModel.getFilter();
-    const movies = this._moviesModel.getMovies();
-    const filteredMovies = filterMap[filterType](movies);
-
-    return filteredMovies;
   }
 
   _getFilmById(id) {

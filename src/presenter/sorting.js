@@ -3,7 +3,7 @@ import SortingView from '../view/sorting';
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 import {UpdateType} from "../const.js";
 
-export default class Filter {
+export default class Sorting {
   constructor(sortingContainer, sortingModel) {
     this._sortingContainer = sortingContainer;
     this._sortingModel = sortingModel;

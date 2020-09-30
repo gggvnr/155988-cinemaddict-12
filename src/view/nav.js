@@ -29,12 +29,4 @@ export default class Nav extends Abstract {
   getTemplate() {
     return createNavTemplate(this._filters);
   }
-
-  setMenuItem(menuItem) {
-    const item = this.getElement().querySelector(`[value=${menuItem}]`);
-
-    if (item !== null) {
-      item.checked = true;
-    }
-  }
 }

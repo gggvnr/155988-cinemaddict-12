@@ -7,8 +7,7 @@ import {UserAction, UpdateType, KeyCodes, DetailsViewState} from '../const';
 import {render, RenderPosition, remove} from '../utils/render';
 
 export default class MovieDetails {
-  constructor(handleViewAction, api) {
-    this._api = api;
+  constructor(handleViewAction) {
     this._filmData = {};
 
     this._handleViewAction = handleViewAction;

@@ -1,5 +1,6 @@
 import he from "he";
 
+import Provider from '../../api/provider';
 import Abstract from '../abstract';
 
 import {humanizeCommentDate} from '../../utils/common';
@@ -42,7 +43,7 @@ const createCommentTemplate = (
 };
 
 function getButtonDisabledAttr(isDisabled) {
-  return isDisabled ? `disabled` : ``;
+  return isDisabled || !Provider.isOnline() ? `disabled` : ``;
 }
 
 function getAbortingClassname(isAborting) {

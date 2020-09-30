@@ -1,6 +1,6 @@
 import Smart from '../smart';
 
-import {humanizeDate} from '../../utils/common';
+import {humanizeDate, getFormattedDuration} from '../../utils/common';
 
 export const createFilmDetailsTopDataTemplate = ({
   title = ``,
@@ -64,7 +64,7 @@ export const createFilmDetailsTopDataTemplate = ({
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${duration}</td>
+              <td class="film-details__cell">${getFormattedDuration(duration)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
